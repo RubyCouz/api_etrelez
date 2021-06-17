@@ -21,9 +21,7 @@ module.exports = buildSchema(`
         }
         
         type AuthData {
-            userId: ID!
             token: String!
-            tokenExpiration: Int!
         }
         
         type Event {
