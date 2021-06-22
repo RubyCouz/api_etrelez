@@ -37,9 +37,10 @@ module.exports = {
      * connexion
      * @param user_email
      * @param user_password
-     * @returns {Promise<{tokenExpiration: number, userId, token: (*)}>}
+     * @param req
+     * @returns {Promise<{token: (*)}>}
      */
-    login: async ({user_email, user_password}) => {
+    login: async ({user_email, user_password}, req) => {
         const user = await User.findOne({user_email: user_email})
         if(!user) {
             throw new Error('Cet Utilisateur n\'existe pas')
@@ -49,13 +50,40 @@ module.exports = {
             throw new Error('Le mot de passe est incorrect !!!')
         }
 
+        const expiresSecond = 1 * (60 * 60); 
+
         const token = jwt.sign(
-            {userId: user.id, user_email: user.user_email},
-            'EterelzUser',
             {
-                expiresIn: '2h'
-            }
+                userId: user.id,
+                user_email: user.user_email,
+                exp: Math.floor(Date.now() / 1000) + expiresSecond ,
+            },
+            'EterelzUser'
         )
+        
+        const arrayToken = token.split('.')
+
+        const cookieOptions = {
+            //domain: 'localhost:8080',
+            //path: '/',
+            expires:  new Date(Date.now() + expiresSecond * 1000),
+            sameSite: "Lax",
+            //secure: true,
+        }
+
+        req.res
+            .cookie('jwt_HP', arrayToken[0] + '.' + arrayToken[1] , 
+                {
+                    ...cookieOptions,
+                }
+            )
+            .cookie('jwt_S', '.' + arrayToken[2] , 
+                { 
+                    ...cookieOptions,
+                    httpOnly: true,
+                }
+            )
+            
         return {
             token: token,
         }
