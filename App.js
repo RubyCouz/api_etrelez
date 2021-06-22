@@ -25,7 +25,7 @@ app.use('/api', graphqlHTTP({
     rootValue: graphqlResolver,
     graphiql: true
 }))
-mongoose.connect(`mongodb://localhost:27017/EterelZ?readPreference=primary&appname=MongoDB%20Compass&ssl=false`)
+mongoose.connect(`mongodb://localhost:27017/EterelZ?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,{ useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
             app.listen(8080)
         }
