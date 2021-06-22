@@ -1,32 +1,25 @@
 const jwt = require('jsonwebtoken')
 module.exports = (req, res, next) => {
+    // faux jusqu'a preuve du contraire
+    req.isAuth = false
+
     // récupération du champs 'Authorization'
-    const authHeader = req.get('Authorization')
-    if(!authHeader) {
-        // défintion de la requête à false
-        req.isAuth = false
-        // envoie à la méthode suivante
-        return next()
-    }
-    const token = authHeader.split(' ')[1]
-    // si le token n'existe pas ou est vide
-    if(!token || token === ' ') {
-        req.isAuth = false
-        return next()
-    }
-    let decodedToken
+    const cookie = ( (req.cookies.jwt_HP && req.cookies.jwt_S) ? (req.cookies.jwt_HP + req.cookies.jwt_S) :  false )
+
+    // véréfication on a récupérée quelque chose
+    if (!cookie) return next()
+   
+    let decodedToken    
     // vérficiation de la validité du token
     try {
-        decodedToken = jwt.verify(token, 'EterelzUser')
+        decodedToken = jwt.verify(cookie, 'EterelzUser')
     } catch (err) {
-        req.isAuth = false
         return next()
     }
+
     // si le token n'est pas valide
-    if(!decodedToken) {
-        req.isAuth = false
-        return next()
-    }
+    if(!decodedToken) return next()
+
     // définition de la requête à true
     req.isAuth = true
     // récupération de l'id user stocké dans le token
