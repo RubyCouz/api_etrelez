@@ -11,7 +11,7 @@ module.exports = buildSchema(`
             user_zip: String
             user_city: String
             user_gender: String
-            user_role: String
+            user_role: String!
             user_state: String 
             user_createdEvent: [Event!] 
             user_createdClans: [Clan!]

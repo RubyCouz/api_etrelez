@@ -5,7 +5,7 @@ const {graphqlHTTP} = require ('express-graphql')
 const graphqlSchema = require('./graphql/schema/index')
 const graphqlResolver = require('./graphql/resolvers/index')
 const isAuth = require('./middleware/is-auth')
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
 const app = express()
 

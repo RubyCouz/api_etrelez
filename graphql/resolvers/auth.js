@@ -21,7 +21,8 @@ module.exports = {
             const user = new User({
                 user_login: args.userInput.user_login,
                 user_email: args.userInput.user_email,
-                user_password: hashedPassword
+                user_password: hashedPassword,
+                user_role: 'membre'
             })
             const result = await user.save()
             return {
@@ -55,12 +56,12 @@ module.exports = {
         const token = jwt.sign(
             {
                 userId: user.id,
+                userRole: user.user_role,
                 user_email: user.user_email,
                 exp: Math.floor(Date.now() / 1000) + expiresSecond ,
             },
             'EterelzUser'
         )
-        
         const arrayToken = token.split('.')
 
         const cookieOptions = {
@@ -83,7 +84,7 @@ module.exports = {
                     httpOnly: true,
                 }
             )
-            
+            console.log(user)
         return {
             token: token,
         }
