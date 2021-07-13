@@ -164,16 +164,16 @@ const singleGame = async gameId => {
     }
 }
 
-const transformUser = user => {
+const transformUser = userObject => {
     return {
-        ...user._doc,
-        _id: user.id,
-        user_createdEvent: user.bind(this, user._doc.event_creator),
-        user_clan: user.bind(this, user._doc.user_clan),
-        user_stream: user.bind(this, user._doc.user_stream),
-        user_game_played: user.bind(this, user._doc.user_game_played),
-        createdAt: dateToString(user._doc.createdAt),
-        updatedAt: dateToString(user._doc.createdAt)
+        ...userObject._doc,
+        _id: userObject.id,
+        user_createdEvent: user.bind(this, userObject._doc.event_creator),
+        user_clan: user.bind(this, userObject._doc.user_clan),
+        user_stream: user.bind(this, userObject._doc.user_stream),
+        user_game_played: user.bind(this, userObject._doc.user_game_played),
+        createdAt: dateToString(userObject._doc.createdAt),
+        updatedAt: dateToString(userObject._doc.createdAt)
     }
 }
 
@@ -273,3 +273,4 @@ exports.transformEvent = transformEvent
 exports.transformEngagement = transformEngagement
 exports.transformClan = transformClan
 exports.transformGame = transformGame
+exports.transformUser = transformUser
