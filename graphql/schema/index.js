@@ -130,6 +130,7 @@ module.exports = buildSchema(`
         
         type RootQuery {
             users: [User!]!
+            user(_id: ID!): User!
             events: [Event!]!
             clans: [Clan!]!
             games: [Game!]!

@@ -4,6 +4,7 @@ const engagementResolver = require('./engagements')
 const clanResolver = require('./clans')
 const streamResolver = require('./streams')
 const gameResolver = require('./games')
+const userResolver = require('./users')
 
 const rootResolver = {
     ...authResolver,
@@ -11,7 +12,8 @@ const rootResolver = {
     ...engagementResolver,
     ...gameResolver,
     ...streamResolver,
-    ...eventResolver
+    ...eventResolver,
+    ...userResolver,
 }
 
 module.exports = rootResolver
