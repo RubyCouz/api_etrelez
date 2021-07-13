@@ -84,7 +84,6 @@ module.exports = {
                     httpOnly: true,
                 }
             )
-            console.log(user)
         return {
             token: token,
         }
