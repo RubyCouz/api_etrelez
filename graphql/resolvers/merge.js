@@ -163,10 +163,10 @@ const transformUser = userObject => {
     return {
         ...userObject._doc,
         _id: userObject.id,
-        user_createdEvent: user.bind(this, userObject._doc.event_creator),
-        user_clan: user.bind(this, userObject._doc.user_clan),
-        user_stream: user.bind(this, userObject._doc.user_stream),
-        user_game_played: user.bind(this, userObject._doc.user_game_played),
+        user_createdEvent: events.bind(this, userObject._doc.user_createdEvent),
+        user_clan: clans.bind(this, userObject._doc. user_createdClans),
+        user_stream: streams.bind(this, userObject._doc.user_stream),
+        user_game_played: games.bind(this, userObject._doc.user_addedGames),
         createdAt: dateToString(userObject._doc.createdAt),
         updatedAt: dateToString(userObject._doc.createdAt)
     }
