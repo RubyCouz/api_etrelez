@@ -37,7 +37,6 @@ const events = async eventIds => {
                 eventIds.indexOf(a._id.toString()) - eventIds.indexOf(b._id.toString())
             )
         })
-        console.log(events, eventIds)
         return events.map(event => {
             return transformEvent(event)
         })
@@ -63,7 +62,6 @@ const users = async userIds => {
                 userIds.indexOf(a._id.toString()) - userIds.indexOf(b._id.toString())
             )
         })
-        console.log(users, userIds)
         return clans.map(user => {
             return transformUser(user)
         })
@@ -95,7 +93,6 @@ const clans = async clanIds => {
                 clanIds.indexOf(a._id.toString()) - clanIds.indexOf(b._id.toString())
             )
         })
-        console.log(clans, clanIds)
         return clans.map(clan => {
             return transformClan(clan)
         })
@@ -121,7 +118,6 @@ const games = async gameIds => {
                 gameIds.indexOf(a._id.toString()) - gameIds.indexOf(b._id.toString())
             )
         })
-        console.log(games, gameIds)
         return games.map(game => {
             return transformGame(game)
         })
@@ -139,7 +135,6 @@ const streams = async streamIds => {
                 streamIds.indexOf(a._id.toString()) - streamIds.indexOf(b._id.toString())
             )
         })
-        console.log(streams, streamIds)
         return streams.map(stream => {
             return transformStream(stream)
         })
