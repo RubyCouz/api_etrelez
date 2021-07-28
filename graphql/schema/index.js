@@ -100,6 +100,20 @@ module.exports = buildSchema(`
             user_email: String!
             user_password: String!
         }
+
+        input UserUpdateInput {
+            user_login: String
+            user_email: String
+            user_password: String
+            user_discord: String
+            user_address: String
+            user_zip: String
+            user_city: String
+            user_gender: String
+            user_role: String
+            user_state: String 
+            updatedAt: String
+        }
             
         input EventInput {
             event_name: String!
@@ -155,6 +169,7 @@ module.exports = buildSchema(`
             cancelPlayGame(gameId: ID!): Game!
             cancelJoinClan(clanId: ID!): Clan!
             cancelJoining(engagementId: ID!): Event!
+            updateUser(_id: ID!, updateUserInput: UserUpdateInput): User!
             
         }
         
