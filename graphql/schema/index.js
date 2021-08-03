@@ -18,6 +18,7 @@ module.exports = buildSchema(`
             user_addedGames: [Game!]
             createdAt: String!
             updatedAt: String!
+            user_isActive: Boolean
         }
         
         type AuthData {
@@ -113,6 +114,7 @@ module.exports = buildSchema(`
             user_role: String
             user_state: String 
             updatedAt: String
+            user_isActive: Boolean
         }
             
         input EventInput {

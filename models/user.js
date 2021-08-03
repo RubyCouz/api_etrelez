@@ -22,6 +22,7 @@ const userSchema = new Schema({
         user_gender: unRequiredString,
         user_role: unRequiredString,
         user_state: unRequiredString,
+        user_isActive: Boolean,
         user_createdEvent: [{
             type: Schema.Types.ObjectId,
             ref: 'Event'

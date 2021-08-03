@@ -22,7 +22,8 @@ module.exports = {
                 user_login: args.userInput.user_login,
                 user_email: args.userInput.user_email,
                 user_password: hashedPassword,
-                user_role: 'membre'
+                user_role: 'membre',
+                user_isActive: true,
             })
             const result = await user.save()
             return {
