@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 module.exports = (req, res, next) => {
-    // faux jusqu'a preuve du contraire
+    // faux jusqu'à preuve du contraire
     req.isAuth = false
 
     // récupération du champs 'Authorization'

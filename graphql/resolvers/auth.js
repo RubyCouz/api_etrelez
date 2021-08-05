@@ -59,10 +59,12 @@ module.exports = {
                 userId: user.id,
                 userRole: user.user_role,
                 user_email: user.user_email,
+                user_isDark: user.user_isDark,
                 exp: Math.floor(Date.now() / 1000) + expiresSecond ,
             },
             'EterelzUser'
         )
+        console.log(token)
         const arrayToken = token.split('.')
 
         const cookieOptions = {
