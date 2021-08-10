@@ -4,13 +4,16 @@ module.exports = (req, res, next) => {
     req.isAuth = false
 
     // récupération du champs 'Authorization'
-    const cookie = ( (req.cookies.jwt_HP && req.cookies.jwt_S) ? (req.cookies.jwt_HP + req.cookies.jwt_S) :  false )
+    const cookie = (
+        (req.cookies.jwt_HP && req.cookies.jwt_S) ?
+            (req.cookies.jwt_HP + req.cookies.jwt_S) :
+            false )
 
-    // véréfication on a récupérée quelque chose
+    // vérification on a récupéré quelque chose
     if (!cookie) return next()
    
     let decodedToken    
-    // vérficiation de la validité du token
+    // vérificiation de la validité du token
     try {
         decodedToken = jwt.verify(cookie, 'EterelzUser')
     } catch (err) {

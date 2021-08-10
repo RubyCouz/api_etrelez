@@ -16,6 +16,7 @@ module.exports = buildSchema(`
             user_createdEvent: [Event!] 
             user_createdClans: [Clan!]
             user_addedGames: [Game!]
+            user_stream: [Stream!]
             createdAt: String!
             updatedAt: String!
             user_isActive: Boolean
@@ -72,13 +73,7 @@ module.exports = buildSchema(`
             engagement_user: User!
             engagement_event: Event!
         }
-        
-        type UserStream {
-            _id: ID!
-            user: User!
-            stream: Stream!
-        }
-        
+                
         type UserClan {
             _id: ID!
             user: User!
@@ -138,7 +133,6 @@ module.exports = buildSchema(`
         input GameInput {
             game_name: String!
             game_desc: String!
-            game_creator: String!
         }
         
         input StreamInput {
@@ -166,7 +160,6 @@ module.exports = buildSchema(`
             joinEvent(eventId: ID!): Engagement!
             joinClan(clanId: ID!): UserClan!
             playGame(gameId: ID!): UserGame!
-            joinStream(streamId: ID!): UserStream!
             joinGame(gameId: ID!): ClanGame!
             cancelClanGame(gameId: ID!): Game!
             cancelJoinStream(streamId: ID!): Stream!

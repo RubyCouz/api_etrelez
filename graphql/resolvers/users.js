@@ -13,7 +13,6 @@ module.exports = {
       const user = await User.findOne({
         _id: args._id,
       });
-      console.log(user);
       return transformUser(user);
     } catch (err) {
       throw err;
@@ -26,7 +25,6 @@ module.exports = {
   users: async () => {
     try {
       const users = await User.find(); // populate => récupération des infos des relations (fonctionnalité mongoose)
-      console.log(users)
       return users.map((user) => {
         return transformUser(user);
       });
@@ -38,7 +36,7 @@ module.exports = {
     try {
       const user = await User.findById(_id);
       if (!user) {
-        throw new Error("id inconue");
+        throw new Error("id inconnu");
       } else {
         User.findOneAndUpdate(
           { _id: _id },
@@ -48,7 +46,6 @@ module.exports = {
           }
         );
       }
-      console.log(user);
       return transformUser(user);
     } catch (error) {
       throw error;

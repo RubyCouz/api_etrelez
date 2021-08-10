@@ -194,17 +194,6 @@ const transformEngagement = engagement => {
     }
 }
 
-const transformUserStream = userStream => {
-    return {
-        ...userStream._doc,
-        _id: userStream.id,
-        user: user.bind(this, userStream._doc.user),
-        stream: singleStream.bind(this, userStream._doc.stream),
-        createdAt: dateToString(userStream._doc.createdAt),
-        updatedAt: dateToString(userStream._doc.createdAt)
-    }
-}
-
 const transformClanGame = clanGame => {
     return {
         ...clanGame._doc,
@@ -260,7 +249,8 @@ const transformStream = stream => {
     return {
         ...stream._doc,
         _id: stream.id,
-        stream_players: streams.bind(this, stream._doc.stream_players)
+        stream_url: streams.bind(this, stream._doc.stream_url),
+        stream_support: streams.bind(this, stream._doc.stream_support)
     }
 }
 
@@ -269,3 +259,4 @@ exports.transformEngagement = transformEngagement
 exports.transformClan = transformClan
 exports.transformGame = transformGame
 exports.transformUser = transformUser
+exports.transformStream = transformStream

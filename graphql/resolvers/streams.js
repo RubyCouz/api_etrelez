@@ -1,4 +1,4 @@
-const Stream = require ('../../models/stream')
+const Stream = require('../../models/stream')
 const {transformStream} = require('./merge')
 
 module.exports = {
@@ -6,7 +6,7 @@ module.exports = {
      * liste des streams
      * @returns {Promise<*>}
      */
-    games: async () => {
+    streams: async () => {
         try {
             const streams = await Stream.find()
             return streams.map(stream => {
@@ -23,7 +23,7 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     createStream: async (args, req) => {
-        if(req.isAuth) {
+        if (req.isAuth) {
             throw new Error('Vous devez être connecté pour effectuer cette action !!!')
         }
 
@@ -36,6 +36,13 @@ module.exports = {
         try {
             const result = await stream.save()
             createdStream = transformStream(result)
+            const streamer = await User.findById(req.userId)
+
+            if (!streamer) {
+                throw new Error('User not found')
+            }
+            streamer.user_stream.push(stream)
+            await streamer.save()
             return createdStream
         } catch (err) {
             throw err

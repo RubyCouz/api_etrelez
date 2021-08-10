@@ -5,11 +5,9 @@ const {graphqlHTTP} = require ('express-graphql')
 const graphqlSchema = require('./graphql/schema/index')
 const graphqlResolver = require('./graphql/resolvers/index')
 const isAuth = require('./middleware/is-auth')
-const cookieParser = require('cookie-parser');
 
 const app = express()
 
-app.use(cookieParser())
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
     res.setHeader('Access-Control-Allow-Credentials', true)

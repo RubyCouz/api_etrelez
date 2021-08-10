@@ -39,11 +39,13 @@ module.exports = {
      * connexion
      * @param user_email
      * @param user_password
+     * @param stay_logged
      * @param req
      * @returns {Promise<{token: (*)}>}
      */
-    login: async ({user_email, user_password}, req) => {
+    login: async ({user_email, user_password, stayLogged}, req) => {
         const user = await User.findOne({user_email: user_email})
+        // console.log('stay_logged : ' + JSON.parse(stayLogged))
         if(!user) {
             throw new Error('Cet Utilisateur n\'existe pas')
         }
@@ -64,9 +66,7 @@ module.exports = {
             },
             'EterelzUser'
         )
-        console.log(token)
         const arrayToken = token.split('.')
-
         const cookieOptions = {
             //domain: 'localhost:8080',
             //path: '/',
