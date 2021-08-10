@@ -239,7 +239,7 @@ const transformGame = game => {
     return {
         ...game._doc,
         _id: game.id,
-        game_players: user.bind(this, game._doc.game_players),
+        game_creator: user.bind(this, game._doc.game_creator),
         createdAt: dateToString(game._doc.createdAt),
         updatedAt: dateToString(game._doc.createdAt)
     }
