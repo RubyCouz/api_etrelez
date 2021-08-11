@@ -24,6 +24,7 @@ module.exports = {
                 user_password: hashedPassword,
                 user_role: 'membre',
                 user_isActive: true,
+                user_isDark: false,
             })
             const result = await user.save()
             return {
