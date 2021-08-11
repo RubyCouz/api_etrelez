@@ -1,7 +1,7 @@
+
+const createTokens = require('./createTokens')
 const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
-const jwt = require('jsonwebtoken')
-
 module.exports = {
     /**
      * inscription (création utilisateur)
@@ -43,52 +43,66 @@ module.exports = {
      * @param req
      * @returns {Promise<{token: (*)}>}
      */
-    login: async ({user_email, user_password, stayLogged}, req) => {
+    login: async ({user_email, user_password}, req) => {
+        req.isAuth = false
         const user = await User.findOne({user_email: user_email})
+        console.log(user)
         // console.log('stay_logged : ' + JSON.parse(stayLogged))
-        if(!user) {
+        if (!user) {
             throw new Error('Cet Utilisateur n\'existe pas')
         }
         const isEqual = await bcrypt.compare(user_password, user.user_password)
-        if(!isEqual) {
+        if (!isEqual) {
             throw new Error('Le mot de passe est incorrect !!!')
         }
-
+        // création du token et du refresh token
+        const tokens = createTokens(user)
+        if (tokens) {
+             req.isAuth = true
+        }
         const expiresSecond = (60 * 60)
-
-        const token = jwt.sign(
-            {
-                userId: user.id,
-                userRole: user.user_role,
-                user_email: user.user_email,
-                user_isDark: user.user_isDark,
-                exp: Math.floor(Date.now() / 1000) + expiresSecond ,
-            },
-            'EterelzUser'
-        )
-        const arrayToken = token.split('.')
+        // stockage du token en tableau
+        const arrayToken = tokens.token.split('.')
+        // définition des options des cookies
         const cookieOptions = {
             //domain: 'localhost:8080',
             //path: '/',
-            expires:  new Date(Date.now() + expiresSecond * 1000),
+            expires: new Date(Date.now() + expiresSecond * 1000),
             sameSite: "Lax",
             //secure: true,
         }
-
+        // stockage du refresh token en tableau
+        const arrayRefreshToken = tokens.refreshToken.split('.')
+        // stockage du token dans cookie
         req.res
-            .cookie('jwt_HP', arrayToken[0] + '.' + arrayToken[1] , 
+            .cookie('jwt_HP', arrayToken[0] + '.' + arrayToken[1],
                 {
                     ...cookieOptions,
                 }
             )
-            .cookie('jwt_S', '.' + arrayToken[2] , 
-                { 
+            .cookie('jwt_S', '.' + arrayToken[2],
+                {
                     ...cookieOptions,
                     httpOnly: true,
                 }
             )
+        // stockage du refresh token dans cookie
+        req.res
+            .cookie('jwt_HP_RT', arrayRefreshToken[0] + '.' + arrayRefreshToken[1],
+                {
+                    ...cookieOptions,
+                }
+            )
+            .cookie('jwt_S_RT', '.' + arrayRefreshToken[2],
+                {
+                    ...cookieOptions,
+                    httpOnly: true,
+                }
+            )
+
         return {
-            token: token,
+            token: tokens.token,
+            refreshToken : tokens.refreshToken,
         }
-    }
+    },
 }

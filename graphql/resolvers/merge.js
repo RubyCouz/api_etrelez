@@ -27,7 +27,7 @@ const gameLoader = new DataLoader((gameIds) => {
     return streams(gameIds)
 })
 
-// relation entre les schema : permet de récupérer els information d'un schema au sein d'un autre
+// relation entre les schema : permet de récupérer les information d'un schema au sein d'un autre
 const events = async eventIds => {
     try {
         const events = await Event.find({_id: {$in: eventIds}})
@@ -245,18 +245,18 @@ const transformGame = game => {
     }
 }
 
-const transformStream = stream => {
-    return {
-        ...stream._doc,
-        _id: stream.id,
-        stream_url: streams.bind(this, stream._doc.stream_url),
-        stream_support: streams.bind(this, stream._doc.stream_support)
-    }
-}
+// const transformStream = stream => {
+//     return {
+//         ...stream._doc,
+//         _id: stream.id,
+//         stream_url: streams.bind(this, stream._doc.stream_url),
+//         stream_support: streams.bind(this, stream._doc.stream_support)
+//     }
+// }
 
 exports.transformEvent = transformEvent
 exports.transformEngagement = transformEngagement
 exports.transformClan = transformClan
 exports.transformGame = transformGame
 exports.transformUser = transformUser
-exports.transformStream = transformStream
+// exports.transformStream = transformStream
