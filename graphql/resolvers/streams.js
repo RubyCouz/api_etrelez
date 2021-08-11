@@ -1,4 +1,5 @@
 const Stream = require('../../models/stream')
+const User = require('../../models/user')
 const {transformStream} = require('./merge')
 
 module.exports = {
@@ -37,11 +38,12 @@ module.exports = {
             const result = await stream.save()
             createdStream = transformStream(result)
             const streamer = await User.findById(req.userId)
+            console.log(result)
 
             if (!streamer) {
                 throw new Error('User not found')
             }
-            streamer.user_stream.push(stream)
+            streamer.user_stream.push(result)
             await streamer.save()
             return createdStream
         } catch (err) {

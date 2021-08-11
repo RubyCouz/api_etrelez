@@ -73,7 +73,7 @@ const users = async userIds => {
 const user = async userId => {
     try {
         const user = await userLoader.load(userId.toString()) // convertion des ids en string
-
+        console.log(user)
         return {
             ...user._doc,
             _id: user.id,
@@ -129,8 +129,9 @@ const games = async gameIds => {
 const streams = async streamIds => {
     try {
         const streams = await Stream.find({_id: {$in: streamIds}})
+        console.log(streamIds)
 
-        events.sort((a, b) => {
+        streams.sort((a, b) => {
             return (
                 streamIds.indexOf(a._id.toString()) - streamIds.indexOf(b._id.toString())
             )
@@ -246,11 +247,12 @@ const transformGame = game => {
 }
 
 const transformStream = stream => {
+
     return {
         ...stream._doc,
         _id: stream.id,
-        stream_url: streams.bind(this, stream._doc.stream_url),
-        stream_support: streams.bind(this, stream._doc.stream_support)
+        stream_url: stream.stream_url,
+        stream_support: stream.stream_support,
     }
 }
 
