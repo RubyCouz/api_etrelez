@@ -57,7 +57,7 @@ const users = async userIds => {
     try {
         const users = await User.find({_id: {$in: userIds}})
 
-        events.sort((a, b) => {
+        users.sort((a, b) => {
             return (
                 userIds.indexOf(a._id.toString()) - userIds.indexOf(b._id.toString())
             )
@@ -88,7 +88,7 @@ const clans = async clanIds => {
     try {
         const clans = await Clan.find({_id: {$in: clanIds}})
 
-        events.sort((a, b) => {
+        clans.sort((a, b) => {
             return (
                 clanIds.indexOf(a._id.toString()) - clanIds.indexOf(b._id.toString())
             )
@@ -113,7 +113,7 @@ const games = async gameIds => {
     try {
         const games = await Game.find({_id: {$in: gameIds}})
 
-        events.sort((a, b) => {
+        games.sort((a, b) => {
             return (
                 gameIds.indexOf(a._id.toString()) - gameIds.indexOf(b._id.toString())
             )
@@ -240,7 +240,7 @@ const transformGame = game => {
     return {
         ...game._doc,
         _id: game.id,
-        game_players: user.bind(this, game._doc.game_players),
+        game_creator: user.bind(this, game._doc.game_creator),
         createdAt: dateToString(game._doc.createdAt),
         updatedAt: dateToString(game._doc.createdAt)
     }

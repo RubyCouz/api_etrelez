@@ -54,7 +54,7 @@ module.exports = {
             throw new Error('Le mot de passe est incorrect !!!')
         }
 
-        const expiresSecond = 1 * (60 * 60); 
+        const expiresSecond = (60 * 60)
 
         const token = jwt.sign(
             {
@@ -91,5 +91,4 @@ module.exports = {
             token: token,
         }
     }
-
 }
