@@ -35,6 +35,10 @@ const userSchema = new Schema({
         user_addedGames: [{
             type: Schema.Types.ObjectId,
             ref: 'Game'
+        }],
+        user_stream: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Stream'
         }]
     },
     {timestamps: true}

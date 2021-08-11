@@ -245,18 +245,19 @@ const transformGame = game => {
     }
 }
 
-// const transformStream = stream => {
-//     return {
-//         ...stream._doc,
-//         _id: stream.id,
-//         stream_url: streams.bind(this, stream._doc.stream_url),
-//         stream_support: streams.bind(this, stream._doc.stream_support)
-//     }
-// }
+const transformStream = stream => {
+
+    return {
+        ...stream._doc,
+        _id: stream.id,
+        stream_url: stream.stream_url,
+        stream_support: stream.stream_support,
+    }
+}
 
 exports.transformEvent = transformEvent
 exports.transformEngagement = transformEngagement
 exports.transformClan = transformClan
 exports.transformGame = transformGame
 exports.transformUser = transformUser
-// exports.transformStream = transformStream
+exports.transformStream = transformStream
