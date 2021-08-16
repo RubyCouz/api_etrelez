@@ -1,5 +1,6 @@
 const Event = require('../../models/event')
 const User =require('../../models/user')
+const {Schema} = require("mongoose");
 const {transformEvent} = require('./merge')
 
 
@@ -53,5 +54,24 @@ module.exports = {
             console.log(err)
             throw err
         }
+    },
+
+    //Mutatation suppression d'un event
+    /**
+     *
+     * @param args
+     * @param req
+     * @returns {Promise<{[p: string]: *}>}
+     */
+    deleteEvent :async (args,req) => {
+
+       // console.log(args)
+
+        // trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
+        const event = await Event.findById({_id: args.id})
+        // console.log(event)
+        event.remove()
+
+
     },
 }
