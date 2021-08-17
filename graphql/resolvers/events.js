@@ -27,9 +27,9 @@ module.exports = {
      */
     createEvent: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        // if(!req.isAuth) {
-        //     throw new Error('Unauthenticated !!!')
-        // }
+        if(!req.isAuth) {
+             throw new Error('Unauthenticated !!!')
+        }
         const event = new Event({
             event_name: args.eventInput.event_name,
             event_desc: args.eventInput.event_desc,
