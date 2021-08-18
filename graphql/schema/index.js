@@ -57,6 +57,7 @@ module.exports = buildSchema(`
             _id: ID!
             game_name: String!
             game_desc: String!
+            game_pic: String
             game_creator: User!
             createdAt: String!
             updatedAt: String!
@@ -133,6 +134,7 @@ module.exports = buildSchema(`
         input GameInput {
             game_name: String!
             game_desc: String!
+            game_pic: String
         }
         
         input StreamInput {

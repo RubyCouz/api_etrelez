@@ -14,6 +14,7 @@ const unRequiredString = {
 const gameSchema = new Schema({
         game_name: requiredString,
         game_desc: requiredString,
+        game_pic: unRequiredString,
         game_creator: [{
             type: Schema.Types.ObjectId,
             ref: 'User'

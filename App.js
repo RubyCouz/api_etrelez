@@ -6,7 +6,7 @@ const graphqlSchema = require('./graphql/schema/index')
 const graphqlResolver = require('./graphql/resolvers/index')
 const isAuth = require('./middleware/is-auth')
 const cookieParser = require('cookie-parser');
-
+const upload = require('./upload/upload')
 const app = express()
 
 app.use(cookieParser())
@@ -28,6 +28,7 @@ app.use('/api', graphqlHTTP({
     rootValue: graphqlResolver,
     graphiql: true
 }))
+app.post('/upload', upload)
 mongoose.connect(`mongodb://localhost:27017/EterelZ?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,{ useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
             app.listen(8080)
