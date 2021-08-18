@@ -30,6 +30,7 @@ module.exports = {
         if(!req.isAuth) {
              throw new Error('Unauthenticated !!!')
         }
+        
         const event = new Event({
             event_name: args.eventInput.event_name,
             event_desc: args.eventInput.event_desc,
@@ -64,14 +65,19 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     deleteEvent :async (args,req) => {
+        if(!req.isAuth) {
+            throw new Error('Unauthenticated !!!')
+        }
 
-       // console.log(args)
-
-        // trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
+        //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
         const event = await Event.findById({_id: args.id})
-        // console.log(event)
-        event.remove()
 
-
+        try {
+            event.remove()
+            return transformEvent(event)
+        } catch (err) {
+            console.log(err)
+            throw err
+        }
     },
 }
