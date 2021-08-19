@@ -27,7 +27,7 @@ module.exports = {
      */
     createEvent: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
              throw new Error('Unauthenticated !!!')
         }
         
@@ -65,7 +65,7 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     deleteEvent :async (args,req) => {
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
 

@@ -11,7 +11,7 @@ module.exports = {
      */
     userClan: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         try {
@@ -31,7 +31,7 @@ module.exports = {
      */
     joinClan: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         const fetchedClan = await Clan.findOne({_id: args.clanId})
@@ -51,7 +51,7 @@ module.exports = {
      */
     cancelJoinClan: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         try {

@@ -11,7 +11,7 @@ module.exports = {
      */
     engagement: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         try {
@@ -31,7 +31,7 @@ module.exports = {
      */
     joinEvent: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         const fetchedEvent = await Event.findOne({_id: args.eventId})
@@ -51,7 +51,7 @@ module.exports = {
      */
     cancelJoining: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         try {

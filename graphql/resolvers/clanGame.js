@@ -11,7 +11,7 @@ module.exports = {
      */
     clanGame: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         try {
@@ -31,7 +31,7 @@ module.exports = {
      */
     joinGame: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         const fetchedGame = await Game.findOne({_id: args.gameId})
@@ -51,7 +51,7 @@ module.exports = {
      */
     cancelClanGame: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
         try {

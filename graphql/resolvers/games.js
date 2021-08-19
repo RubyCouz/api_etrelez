@@ -24,7 +24,7 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     createGame: async (args, req) => {
-        if(!req.isAuth) {
+        if(!req.isAuth.valid) {
             throw new Error('Vous devez être connecté pour effectuer cette action !!!')
         }
 

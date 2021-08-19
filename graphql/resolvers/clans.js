@@ -26,7 +26,7 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     createClan: async (args, req) => {
-        if (!req.isAuth) {
+        if (!req.isAuth.valid) {
             throw new Error('Vous devez vous connecter !!!')
         }
         const clan = new Clan({
