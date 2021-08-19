@@ -32,7 +32,11 @@ module.exports = {
       throw err;
     }
   },
-  updateUser: async ({ _id: _id, updateUserInput }) => {
+  updateUser: async ({ _id: _id, updateUserInput }, req) => {
+    if(!req.isAuth.valid && !(req.isAuth.userRole === "admin" || req.isAuth.userId === _id))  {
+      throw new Error('Non !')
+    }
+
     try {
       const user = await User.findById(_id);
       if (!user) {
