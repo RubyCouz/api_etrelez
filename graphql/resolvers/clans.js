@@ -52,7 +52,6 @@ module.exports = {
             await clan_creator.save()
             return user_createdClan
         } catch (err) {
-            console.log(err)
             throw err
         }
     }

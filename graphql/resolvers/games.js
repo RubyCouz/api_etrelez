@@ -31,6 +31,7 @@ module.exports = {
         const game = new Game({
             game_name: args.gameInput.game_name,
             game_desc: args.gameInput.game_desc,
+            game_pic: args.gameInput.game_pic,
             game_creator: req.userId
         })
         let createdGame

@@ -47,8 +47,6 @@ module.exports = {
     login: async ({user_email, user_password}, req) => {
         req.isAuth = false
         const user = await User.findOne({user_email: user_email})
-        console.log(user)
-        // console.log('stay_logged : ' + JSON.parse(stayLogged))
         if (!user) {
             throw new Error('Cet Utilisateur n\'existe pas')
         }

@@ -4,7 +4,6 @@ const {REFRESH_TOKEN_KEY, TOKEN_KEY} = require('../../helpers/tokenKey')
 
 module.exports = (args) => {
         // définition token
-console.log(args)
     const expiresSecond = (60 * 60)
     const token = jwt.sign(
             {

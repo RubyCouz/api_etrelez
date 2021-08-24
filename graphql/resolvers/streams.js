@@ -38,7 +38,6 @@ module.exports = {
             const result = await stream.save()
             createdStream = transformStream(result)
             const streamer = await User.findById(req.userId)
-            console.log(result)
 
             if (!streamer) {
                 throw new Error('User not found')
