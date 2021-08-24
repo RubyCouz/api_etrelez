@@ -50,7 +50,6 @@ module.exports = {
             await creator.save()
             return createdEvent
         } catch (err) {
-            console.log(err)
             throw err
         }
     },

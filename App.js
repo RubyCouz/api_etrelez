@@ -29,6 +29,7 @@ app.use('/api', graphqlHTTP({
     graphiql: true
 }))
 app.post('/upload', upload)
+console.log(app.mountpath)
 mongoose.connect(`mongodb://localhost:27017/EterelZ?readPreference=primary&appname=MongoDB%20Compass&ssl=false`,{ useNewUrlParser: true, useUnifiedTopology: true})
     .then(() => {
             app.listen(8080)
