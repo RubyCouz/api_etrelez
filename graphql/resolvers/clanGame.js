@@ -15,7 +15,7 @@ module.exports = {
             throw new Error('Unauthenticated !!!')
         }
         try {
-            const clanGames = await ClanGame.find({clan: req.clanId})
+            const clanGames = await ClanGame.find({clan: req.isAuth.clanId})
             return clanGames.map(clanGame => {
                 return transformClanGame(clanGame)
             })
@@ -36,7 +36,7 @@ module.exports = {
         }
         const fetchedGame = await Game.findOne({_id: args.gameId})
         const joining = new Game({
-            clan: req.clanId,
+            clan: req.isAuth.clanId,
             game: fetchedGame
         })
         const result = await joining.save()

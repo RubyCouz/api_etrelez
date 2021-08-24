@@ -15,7 +15,7 @@ module.exports = {
             throw new Error('Unauthenticated !!!')
         }
         try {
-            const userGames = await UserGame.find({user: req.userId})
+            const userGames = await UserGame.find({user: req.isAuth.userId})
             return userGames.map(userGame => {
                 return transformUserGame(userGame)
             })
@@ -36,7 +36,7 @@ module.exports = {
         }
         const fetchedGame = await Game.findOne({_id: args.gameId})
         const joining = new UserGame({
-            user: req.userId,
+            user: req.isAuth.userId,
             game: fetchedGame
         })
         const result = await joining.save()

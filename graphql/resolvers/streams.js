@@ -37,7 +37,7 @@ module.exports = {
         try {
             const result = await stream.save()
             createdStream = transformStream(result)
-            const streamer = await User.findById(req.userId)
+            const streamer = await User.findById(req.isAuth.userId)
 
             if (!streamer) {
                 throw new Error('User not found')

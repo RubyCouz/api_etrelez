@@ -15,7 +15,7 @@ module.exports = {
             throw new Error('Unauthenticated !!!')
         }
         try {
-            const userClans = await UserClan.find({user: req.userId})
+            const userClans = await UserClan.find({user: req.isAuth.userId})
             return userClans.map(userClan => {
                 return transformUserClan(userClan)
             })
@@ -36,7 +36,7 @@ module.exports = {
         }
         const fetchedClan = await Clan.findOne({_id: args.clanId})
         const joining = new UserClan({
-            user: req.userId,
+            user: req.isAuth.userId,
             clan: fetchedClan
         })
         const result = await joining.save()

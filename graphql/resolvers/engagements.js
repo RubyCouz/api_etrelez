@@ -15,7 +15,7 @@ module.exports = {
             throw new Error('Unauthenticated !!!')
         }
         try {
-            const engagements = await Engagement.find({engagement_user: req.userId})
+            const engagements = await Engagement.find({engagement_user: req.isAuth.userId})
             return engagements.map(booking => {
                 return transformEngagement(booking)
             })
@@ -36,7 +36,7 @@ module.exports = {
         }
         const fetchedEvent = await Event.findOne({_id: args.eventId})
         const joining = new Engagement({
-            user: req.userId,
+            user: req.isAuth.userId,
             event: fetchedEvent
         })
         const result = await joining.save()

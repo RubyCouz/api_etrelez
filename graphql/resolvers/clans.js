@@ -43,7 +43,7 @@ module.exports = {
         try {
             const result = await clan.save()
             user_createdClan = transformClan(result)
-            const clan_creator = await User.findById(req.userId)
+            const clan_creator = await User.findById(req.isAuth.userId)
 
             if(!clan_creator) {
                 throw new Error('Utilisateur introuvable !!!')
