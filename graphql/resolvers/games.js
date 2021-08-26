@@ -32,14 +32,14 @@ module.exports = {
             game_name: args.gameInput.game_name,
             game_desc: args.gameInput.game_desc,
             game_pic: args.gameInput.game_pic,
-            game_creator: req.userId
+            game_creator: req.isAuth.userId
         })
         let createdGame
 
         try {
             const result = await game.save()
             createdGame = transformGame(result)
-            const game_creator = await User.findById(req.userId)
+            const game_creator = await User.findById(req.isAuth.userId)
             if(!game_creator) {
                 throw new Error('Utilisateur inconnu !!!')
             }
