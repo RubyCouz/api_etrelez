@@ -35,7 +35,7 @@ module.exports = {
             event_name: args.eventInput.event_name,
             event_desc: args.eventInput.event_desc,
             event_date: new Date(args.eventInput.event_date),
-            event_creator: req.userId
+            event_creator: req.isAuth.userId
         })
         let createdEvent
 
@@ -43,7 +43,7 @@ module.exports = {
             const result = await event
                 .save()
             createdEvent = transformEvent(result)
-            const creator = await User.findById(req.userId)
+            const creator = await User.findById(req.isAuth.userId)
 
             if (!creator) {
                 throw new Error('User not found !!!')
