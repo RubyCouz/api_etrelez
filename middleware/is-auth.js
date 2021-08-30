@@ -2,6 +2,7 @@ const createTokens = require('../graphql/resolvers/createTokens')
 const createCookies = require('../graphql/resolvers/createCookies')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+const {REFRESH_TOKEN_KEY, TOKEN_KEY} = require('../helpers/tokenKey')
 
 module.exports = async (req, res, next) => {
     // faux jusqu'à preuve du contraire
@@ -25,10 +26,10 @@ module.exports = async (req, res, next) => {
     if (cookie || refreshCookie) {
         let role, id
 
-        if (cookie) {   
+        if (cookie) {
             // vérificiation de la validité du token
             try {
-                const decodedToken = jwt.verify(cookie, `TOKEN_KEY`)
+                const decodedToken = jwt.verify(cookie, TOKEN_KEY)
                 // récupération de l'id user stocké dans le token
                 id = decodedToken.userId
                 role = decodedToken.userRole
@@ -40,11 +41,11 @@ module.exports = async (req, res, next) => {
             let decodedRefreshToken
             // vérificiation de la validité du refresh token
             try {
-                decodedRefreshToken = jwt.verify(refreshCookie, `REFRESH_TOKEN_KEY`)
+                decodedRefreshToken = jwt.verify(refreshCookie, REFRESH_TOKEN_KEY)
             } catch (err) {
                 return next()
             }
-            
+
             const user = await User.findOne({_id: req.userId})
             if (!user) {
                 return next()

@@ -17,7 +17,7 @@ module.exports = (user) => {
             user_isDark: user.user_isDark,
             exp: Math.floor(Date.now() / 1000) + ( TOKEN_EXPIRE_TIME * 60 ),
         },
-        `TOKEN_KEY`
+        TOKEN_KEY
     )
     // définition du refresh token
     const refreshToken = jwt.sign(
@@ -25,7 +25,7 @@ module.exports = (user) => {
             userId: user.id,
             exp: Math.floor(Date.now() / 1000) + ( REFRESH_TOKEN_EXPIRE_TIME * 60 ),
         },
-        `REFRESH_TOKEN_KEY`
+        REFRESH_TOKEN_KEY
     )
     return {
         token,
