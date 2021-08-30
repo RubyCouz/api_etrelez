@@ -13,7 +13,7 @@ module.exports = (user) => {
         {
             userId: user.id,
             userRole: user.user_role,
-            user_email: user.user_email,
+            //user_email: user.user_email,
             user_isDark: user.user_isDark,
             exp: Math.floor(Date.now() / 1000) + ( TOKEN_EXPIRE_TIME * 60 ),
         },
@@ -23,6 +23,9 @@ module.exports = (user) => {
     const refreshToken = jwt.sign(
         {
             userId: user.id,
+            userRole: user.user_role,
+            //user_email: user.user_email,
+            user_isDark: user.user_isDark,
             exp: Math.floor(Date.now() / 1000) + ( REFRESH_TOKEN_EXPIRE_TIME * 60 ),
         },
         REFRESH_TOKEN_KEY
