@@ -1,7 +1,8 @@
-
 const createTokens = require('./createTokens')
 const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
+const createCookies = require('./createCookies')
+
 module.exports = {
     /**
      * inscription (création utilisateur)
@@ -54,50 +55,15 @@ module.exports = {
         if (!isEqual) {
             throw new Error('Le mot de passe est incorrect !!!')
         }
+
         // création du token et du refresh token
         const tokens = createTokens(user)
+
         if (tokens) {
              req.isAuth = true
         }
-        const expiresSecond = (60 * 60)
-        // stockage du token en tableau
-        const arrayToken = tokens.token.split('.')
-        // définition des options des cookies
-        const cookieOptions = {
-            //domain: 'localhost:8080',
-            //path: '/',
-            expires: new Date(Date.now() + expiresSecond * 1000),
-            sameSite: "Lax",
-            //secure: true,
-        }
-        // stockage du refresh token en tableau
-        const arrayRefreshToken = tokens.refreshToken.split('.')
-        // stockage du token dans cookie
-        req.res
-            .cookie('jwt_HP', arrayToken[0] + '.' + arrayToken[1],
-                {
-                    ...cookieOptions,
-                }
-            )
-            .cookie('jwt_S', '.' + arrayToken[2],
-                {
-                    ...cookieOptions,
-                    httpOnly: true,
-                }
-            )
-        // stockage du refresh token dans cookie
-        req.res
-            .cookie('jwt_HP_RT', arrayRefreshToken[0] + '.' + arrayRefreshToken[1],
-                {
-                    ...cookieOptions,
-                }
-            )
-            .cookie('jwt_S_RT', '.' + arrayRefreshToken[2],
-                {
-                    ...cookieOptions,
-                    httpOnly: true,
-                }
-            )
+
+        createCookies(req, tokens)
 
         return {
             token: tokens.token,

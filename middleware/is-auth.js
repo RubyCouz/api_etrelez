@@ -1,7 +1,8 @@
-const {TOKEN_KEY, REFRESH_TOKEN_KEY} = require('../helpers/tokenKey')
 const createTokens = require('../graphql/resolvers/createTokens')
+const createCookies = require('../graphql/resolvers/createCookies')
 const jwt = require('jsonwebtoken')
 const User = require('../models/user')
+
 module.exports = async (req, res, next) => {
     // faux jusqu'à preuve du contraire
     req.isAuth = {
@@ -43,47 +44,14 @@ module.exports = async (req, res, next) => {
             } catch (err) {
                 return next()
             }
+            
             const user = await User.findOne({_id: req.userId})
             if (!user) {
                 return next()
             }
+
             const tokens = createTokens(user)
-            // définition des options des cookies
-            const expiresSecond = 7 * (24 * (60 * 60))
-            const cookieOptions = {
-                //domain: 'localhost:8080',
-                //path: '/',
-                expires: new Date(Date.now() + expiresSecond * 1000),
-                sameSite: "Lax",
-                //secure: true,
-            }
-            const arrayToken = tokens.token.split('.')
-            const arrayRefreshToken = tokens.refreshToken.split('.')
-            req.res
-                .cookie('jwt_HP', arrayToken[0] + '.' + arrayToken[1],
-                    {
-                        ...cookieOptions,
-                    }
-                )
-                .cookie('jwt_S', '.' + arrayToken[2],
-                    {
-                        ...cookieOptions,
-                        httpOnly: true,
-                    }
-                )
-            // stockage du refresh token dans cookie
-            req.res
-                .cookie('jwt_HP_RT', arrayRefreshToken[0] + '.' + arrayRefreshToken[1],
-                    {
-                        ...cookieOptions,
-                    }
-                )
-                .cookie('jwt_S_RT', '.' + arrayRefreshToken[2],
-                    {
-                        ...cookieOptions,
-                        httpOnly: true,
-                    }
-                )
+            createCookies(req, tokens)
             
             id = user.id
             role = user.user_role
