@@ -46,7 +46,7 @@ module.exports = async (req, res, next) => {
                 return next()
             }
 
-            const user = await User.findOne({_id: req.userId})
+            const user = await User.findOne({_id: decodedRefreshToken.userId})
             if (!user) {
                 return next()
             }
