@@ -20,10 +20,10 @@ module.exports = {
         }
     },
     /**
-     * création d'un event
+     *
      * @param args
      * @param req
-     * @returns {Promise<{[p: string]: *}>}
+     * @returns {Promise<*&{createdAt: string, event_date: string, event_creator: *, _id: *, updatedAt: string}>}
      */
     createEvent: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
@@ -61,7 +61,7 @@ module.exports = {
      *
      * @param args
      * @param req
-     * @returns {Promise<{[p: string]: *}>}
+     * @returns {Promise<*&{createdAt: string, event_date: string, event_creator: *, _id: *, updatedAt: string}>}
      */
     deleteEvent :async (args,req) => {
         if(!req.isAuth.valid) {
@@ -79,4 +79,37 @@ module.exports = {
             throw err
         }
     },
+
+    /**
+     *
+     * @param id
+     * @param updateEventInput
+     * @param req
+     * @returns {Promise<*&{createdAt: string, event_date: string, event_creator: *, _id: *, updatedAt: string}>}
+     */
+    updateEvent :async({ id, updateEventInput},req) => {
+        if(!req.isAuth.valid) {
+            throw new Error('Unauthenticated !!!')
+        }
+
+        //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
+        const event = await Event.findById({_id : id})
+
+        try {
+            //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
+            Event.findOneAndUpdate({ _id: id },
+                updateEventInput,
+                function (err, doc) {
+                    if (err) return res.send(500, { error: err });
+                }
+            );
+
+            //retourne l'event par l'id
+            return transformEvent(event)
+        } catch (err) {
+            console.log(err)
+            throw err
+        }
+    },
+
 }

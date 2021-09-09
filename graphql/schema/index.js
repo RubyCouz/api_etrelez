@@ -39,7 +39,11 @@ module.exports = buildSchema(`
             updatedAt: String!
         }
         
-      
+      input UpdateEventInput{
+            event_name: String
+            event_date: String
+            event_desc: String
+      }
         
 
         
@@ -163,6 +167,7 @@ module.exports = buildSchema(`
             createUser(userInput: UserInput): User
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event
+            updateEvent(id: ID!,updateEventInput: UpdateEventInput): Event
             createGame(gameInput: GameInput): Game
             createStream(streamInput: StreamInput): Stream
             createClan(clanInput: ClanInput): Clan
