@@ -9,6 +9,8 @@ const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
 const app = express()
 
+app.use(express.static(__dirname + '/Public'))
+
 app.use(cookieParser())
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
@@ -28,6 +30,7 @@ app.use('/api', graphqlHTTP({
     rootValue: graphqlResolver,
     graphiql: true
 }))
+
 app.post('/upload/game', upload)
 app.post('/upload/event', upload)
 app.post('/upload/profilePic', upload)
