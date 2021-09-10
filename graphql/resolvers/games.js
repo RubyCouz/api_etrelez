@@ -27,11 +27,28 @@ module.exports = {
         if(!req.isAuth.valid) {
             throw new Error('Vous devez être connecté pour effectuer cette action !!!')
         }
-
+        // regex pour vérifier les données envoyées par l'appli
+        const regexText = new RegExp('^[A-Za-z0-9\\s\.\_\,\;\:\!\?\/\#\&éèêëàâä\$ùûüîïôöñ\\n\@]+$')
+        // définition d'un tableau contenant les données validées par la fonction de validation
+        let validData = []
+        const verifData = (regex, data) => {
+            console.log(regexText)
+            if(regex.test(data)) {
+                data.trim()
+                validData.push(data)
+            } else {
+                throw new Error('Le champs ' + data + ' contient des caractères invalides')
+            }
+            console.log(validData)
+        }
+        // vérification des données saisie
+        verifData(regexText, args.gameInput.game_name)
+        verifData(regexText, args.gameInput.game_desc)
+        verifData(regexText, args.gameInput.game_pic)
         const game = new Game({
-            game_name: args.gameInput.game_name,
-            game_desc: args.gameInput.game_desc,
-            game_pic: args.gameInput.game_pic,
+            game_name: validData[0],
+            game_desc: validData[1],
+            game_pic: validData[2],
             game_creator: req.isAuth.userId
         })
         let createdGame

@@ -37,14 +37,15 @@ module.exports = function upload(req, res, next) {
     }
     const uploadFolder = uploadDirectory + '/' + folder
     let form = new IncomingForm()
+    // interdiction d'upload multiple
     form.multiples = false
-    form.maxFileSize = 50 * 1024 * 1024 // 5 MB
+    // définition de la taille de fichier max autorisée, ici 5MB
+    form.maxFileSize = 50 * 1024 * 1024
+    // définition de l'endroit sur le serveur où sera stocké le fichier
     form.uploadDir = uploadFolder
+
     form.parse(req, async (err, fields, files) => {
-        console.log('fields', fields);
-        console.log('files', files);
         if (err) {
-            console.log('Error parsing the file')
             return res.status(400).json({
                 status: 'Fail',
                 message: 'There was an error parsing the file',
@@ -63,39 +64,53 @@ module.exports = function upload(req, res, next) {
             return validType.indexOf(type) !== -1;
 
         }
-        // vérification upload multiple
-        if (!files.file.length) {
-            const file = files.file
-            const isValid = isValidFile(file)
-            // création d'un nom valide en enlevant les espaces
-            const fileName = encodeURIComponent(file.name.replace(/\s/g, '-'))
+        if (typeof files === 'object') {
+            // vérification upload multiple
+            if (!files.file.length) {
+                const file = files.file
+                // regex pour la vérification du nom de fichier
+                const fileRegex = new RegExp('^[\\w\\s-]+\\.[A-Za-z]{3,4}$')
+                // test du nom de fichier
+                const regexValid = fileRegex.test(file.name)
+                // vérification du type de fichier
+                const isValid = isValidFile(file)
+                // création d'un nom valide en enlevant les espaces
+                const fileName = encodeURIComponent(file.name.replace(/\s/g, '-'))
 
-            if (!isValid) {
-                return res.status(400).json({
-                    status: 'Fail',
-                    message: 'The file is not a valid type'
-                })
-            }
-            try {
-                fs.renameSync(file.path, uploadFolder + '/' + fileName)
-            } catch (error) {
-                console.log(error)
-            }
-            try {
-                const newFile = await File.create({
-                    name: `files/${fileName}`
-                })
-                return res.status(200).json({
-                    status: 'Success',
-                    message: 'File created successfully !!'
-                })
-            } catch (error) {
-                res.json({
-                    error
-                })
+                if (!isValid) {
+                    return res.status(400).json({
+                        status: 'Fail',
+                        message: 'The file is not a valid type'
+                    })
+                }
+
+                if (!regexValid) {
+                    return res.response(400).json({
+                        status: 'Fail',
+                        message: 'The name of the file is not a valid name'
+                    })
+                }
+
+                try {
+                    fs.renameSync(file.path, uploadFolder + '/' + fileName)
+                } catch (error) {
+                    console.log(error)
+                }
+
+                try {
+                    const newFile = await File.create({
+                        name: `files/${fileName}`
+                    })
+                    return res.status(200).json({
+                        status: 'Success',
+                        message: 'File created successfully !!'
+                    })
+                } catch (error) {
+                    res.json({
+                        error
+                    })
+                }
             }
         }
-
     })
-
 }
