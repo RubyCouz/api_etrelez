@@ -45,9 +45,6 @@ module.exports = buildSchema(`
             event_desc: String
       }
         
-
-        
-        
         type Clan {
             _id: ID!
             clan_name: String!
@@ -125,7 +122,7 @@ module.exports = buildSchema(`
         }
             
         input EventInput {
-       
+
             event_name: String!
             event_date: String!
             event_desc: String!
@@ -155,6 +152,7 @@ module.exports = buildSchema(`
         type RootQuery {
             users: [User!]!
             user(_id: ID!): User!
+            selectUser(user_email: String!): User!
             events: [Event!]!
             clans: [Clan!]!
             games: [Game!]!

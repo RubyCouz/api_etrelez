@@ -4,6 +4,15 @@ const User = require('../../models/user')
 const createCookies = require('./createCookies')
 
 module.exports = {
+
+    selectUser: async ({user_email}) => {
+        const existingUser = await User.findOne(
+        {user_email: user_email}
+        )
+        if(existingUser) {
+            throw new Error ('Utilisateur déjà inscrit')
+        }
+    },
     /**
      * inscription (création utilisateur)
      * @param args
