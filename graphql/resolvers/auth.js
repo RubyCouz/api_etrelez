@@ -3,7 +3,8 @@ const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
 const createCookies = require('./createCookies')
 const {emailRegex, passwordRegex, loginRegex} = require('../../helpers/regex')
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer')
+const config = require('../../config.json')
 
 module.exports = {
 
@@ -53,7 +54,7 @@ module.exports = {
             const output = `
                 <h1>Bienvenue sur Eterelz, ${args.userInput.user_login}</h1>
                 <p>Pour confirmer votre inscription ,veuillez cliquer sur le lien ci-dessous :</p>
-                    <a href="http://localhost:3000/verifyAcount" title="Validation de l'inscription">Validation</a>
+                    <a href="http://localhost:3000/verifyAccount" title="Validation de l'inscription">Validation</a>
             `
 
             // create reusable transporter object using the default SMTP transport
@@ -62,8 +63,8 @@ module.exports = {
                 port: 587,
                 secure: false, // true for 465, false for other ports
                 auth: {
-                    user: 'admin@rubycouz.xyz', // generated ethereal user
-                    pass: '#Couz2805', // generated ethereal password
+                    user: config.email, // generated ethereal user
+                    pass: config.pass, // generated ethereal password
                 },
                 tls: {
                     rejectUnauthorized: false
