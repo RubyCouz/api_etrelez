@@ -3,16 +3,16 @@ const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
 const createCookies = require('./createCookies')
 const {emailRegex, passwordRegex, loginRegex} = require('../../helpers/regex')
-
+const nodemailer = require("nodemailer");
 
 module.exports = {
 
     selectUser: async ({user_email}) => {
         const existingUser = await User.findOne(
-        {user_email: user_email}
+            {user_email: user_email}
         )
-        if(existingUser) {
-            throw new Error ('Utilisateur déjà inscrit')
+        if (existingUser) {
+            throw new Error('Utilisateur déjà inscrit')
         }
     },
     /**
@@ -23,13 +23,13 @@ module.exports = {
     createUser: async (args) => {
 
         try {
-            if(!emailRegex.test(args.userInput.user_email)) {
+            if (!emailRegex.test(args.userInput.user_email)) {
                 throw new Error('Email non valide !')
             }
-            if(!passwordRegex.test(args.userInput.user_password)) {
+            if (!passwordRegex.test(args.userInput.user_password)) {
                 throw new Error('Mot de passe non valide !')
             }
-            if(!loginRegex.test(args.userInput.user_login)) {
+            if (!loginRegex.test(args.userInput.user_login)) {
                 throw new Error('Login non valide !')
             }
             const existingUser = await User.findOne({
@@ -49,6 +49,43 @@ module.exports = {
                 user_isDark: false,
             })
             const result = await user.save()
+            // envoie de mail pour confirmation
+            const output = `
+                <h1>Bienvenue sur Eterelz, ${args.userInput.user_login}</h1>
+                <p>Pour confirmer votre inscription ,veuillez cliquer sur le lien ci-dessous :</p>
+                    <a href="http://localhost:3000/verifyAcount" title="Validation de l'inscription">Validation</a>
+            `
+
+            // create reusable transporter object using the default SMTP transport
+            let transporter = nodemailer.createTransport({
+                host: "mail.privateemail.com",
+                port: 587,
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: 'admin@rubycouz.xyz', // generated ethereal user
+                    pass: '#Couz2805', // generated ethereal password
+                },
+                tls: {
+                    rejectUnauthorized: false
+                }
+            });
+
+            // send mail with defined transport object
+            let info = await transporter.sendMail({
+                from: '"Eterelz" <admin@rubycouz.xyz>', // sender address
+                to: args.userInput.user_email, // list of receivers
+                subject: "Confirmation d'inscription à la communauté Eterelz", // Subject line
+                text: "Hello world?", // plain text body
+                html: output, // html body
+            });
+
+            console.log("Message sent: %s", info.messageId);
+            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+            // Preview only available when sending through an Ethereal account
+            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
             return {
                 ...result._doc,
                 user_password: null,
@@ -69,7 +106,7 @@ module.exports = {
     login: async ({user_email, user_password}, req) => {
         req.isAuth = false
         // check email
-        if(!emailRegex.test(user_email)){
+        if (!emailRegex.test(user_email)) {
             throw new Error('Email non valide !')
         }
         const user = await User.findOne({user_email: user_email})
@@ -88,14 +125,14 @@ module.exports = {
         const tokens = createTokens(user)
 
         if (tokens) {
-             req.isAuth = true
+            req.isAuth = true
         }
 
         createCookies(req, tokens)
 
         return {
             token: tokens.token,
-            refreshToken : tokens.refreshToken,
+            refreshToken: tokens.refreshToken,
         }
     },
 }
