@@ -21,6 +21,7 @@ module.exports = buildSchema(`
             updatedAt: String!
             user_isActive: Boolean
             user_isDark: Boolean
+            user_activation: String!
         }
         
         type AuthData {
