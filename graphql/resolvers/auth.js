@@ -2,6 +2,8 @@ const createTokens = require('./createTokens')
 const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
 const createCookies = require('./createCookies')
+const {emailRegex, passwordRegex, loginRegex} = require('../../helpers/regex')
+
 
 module.exports = {
 
@@ -19,7 +21,17 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     createUser: async (args) => {
+
         try {
+            if(!emailRegex.test(args.userInput.user_email)) {
+                throw new Error('Email non valide !')
+            }
+            if(!passwordRegex.test(args.userInput.user_password)) {
+                throw new Error('Mot de passe non valide !')
+            }
+            if(!loginRegex.test(args.userInput.user_login)) {
+                throw new Error('Login non valide !')
+            }
             const existingUser = await User.findOne({
                 user_email: args.userInput.user_email
             })
@@ -56,15 +68,22 @@ module.exports = {
      */
     login: async ({user_email, user_password}, req) => {
         req.isAuth = false
+        // check email
+        if(!emailRegex.test(user_email)){
+            throw new Error('Email non valide !')
+        }
         const user = await User.findOne({user_email: user_email})
         if (!user) {
-            throw new Error('Cet Utilisateur n\'existe pas')
+            throw new Error('Cet utilisateur n\'existe pas')
+        }
+        // check password
+        if (!passwordRegex.test(user_password)) {
+            throw new Error('Mot de passe non valide !')
         }
         const isEqual = await bcrypt.compare(user_password, user.user_password)
         if (!isEqual) {
             throw new Error('Le mot de passe est incorrect !!!')
         }
-
         // création du token et du refresh token
         const tokens = createTokens(user)
 

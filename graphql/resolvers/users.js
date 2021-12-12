@@ -32,6 +32,13 @@ module.exports = {
       throw err;
     }
   },
+  /**
+   * update user's informations
+   * @param _id
+   * @param updateUserInput
+   * @param req
+   * @returns {Promise<*&{createdAt: string, user_createdEvent: *, user_stream: *, _id: *, user_game_played: *, user_clan: *, updatedAt: string}>}
+   */
   updateUser: async ({ _id: _id, updateUserInput }, req) => {
     if(!req.isAuth.valid && !(req.isAuth.userRole === "admin" || req.isAuth.userId === _id))  {
       throw new Error('Non !')
