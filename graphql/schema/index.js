@@ -151,7 +151,6 @@ module.exports = buildSchema(`
         type RootQuery {
             users: [User!]!
             user(_id: ID!): User!
-            confirmUser(token: String!): User
             selectUser(user_email: String!): User!
             events: [Event!]!
             clans: [Clan!]!
@@ -163,6 +162,7 @@ module.exports = buildSchema(`
         
         type RootMutation {
             createUser(userInput: UserInput): User
+            confirmUser(token: String!): User
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event
             updateEvent(id: ID!,updateEventInput: UpdateEventInput): Event

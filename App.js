@@ -7,6 +7,8 @@ const graphqlResolver = require('./graphql/resolvers/index')
 const isAuth = require('./middleware/is-auth')
 const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
+const getErrorCode = require("./errors/errors");
+const {log} = require("nodemon/lib/utils");
 const app = express()
 
 app.use(express.static(__dirname + '/Public'))
@@ -28,7 +30,12 @@ app.use(isAuth)
 app.use('/api', graphqlHTTP({
     schema: graphqlSchema,
     rootValue: graphqlResolver,
-    graphiql: true
+    graphiql: true,
+    customFormatErrorFn: (err) => {
+        const error = getErrorCode(err.message)
+        console.log(error)
+        return({ message: error.message, status: error.statusCode})
+    }
 }))
 
 app.post('/upload/game', upload)

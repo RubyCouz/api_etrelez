@@ -7,6 +7,7 @@ const verificationMail = require('../../middleware/sendVerificationMail')
 const jwt = require("jsonwebtoken");
 const {CONFIRMATION_TOKEN_EXPIRE_TIME} = require("../../helpers/tokenExpireTime");
 const {TOKEN_KEY} = require("../../helpers/tokenKey")
+const {errorName, errorType} = require('../../errors/errorsConstant')
 // const {transformUser} = require('./merge')
 // const {log} = require("nodemon/lib/utils");
 // const {decode} = require("jsonwebtoken");
@@ -46,15 +47,6 @@ module.exports = {
             }
             const hashedPassword = await bcrypt.hash(args.userInput.user_password, 12)
 
-            const token = jwt.sign(
-                {
-                    id: _id,
-                    user_email: args.userInput.user_email,
-                    exp: Math.floor(Date.now() / 1000) + (CONFIRMATION_TOKEN_EXPIRE_TIME * 60)
-                },
-                TOKEN_KEY
-            )
-
             const user = new User({
                 user_login: args.userInput.user_login,
                 user_email: args.userInput.user_email,
@@ -65,6 +57,15 @@ module.exports = {
             })
             const result = await user.save()
             // envoie de mail pour confirmation
+            const token = jwt.sign(
+                {
+                    id: result._id,
+                    user_email: result.user_email,
+                    exp: Math.floor(Date.now() / 1000) + (CONFIRMATION_TOKEN_EXPIRE_TIME * 60)
+                },
+                TOKEN_KEY
+            )
+            console.log(token)
             await verificationMail.sendVerificationMail(
                 result.user_login,
                 result.user_email,
@@ -81,14 +82,23 @@ module.exports = {
         }
     },
 
-    confirmUser: async(token) => {
-        console.log(token)
-              const decodedToken = await jwt.verify(token, TOKEN_KEY, async (err, decoded) => {
+    confirmUser: async(args) => {
+        let user
+              const decodedToken = await jwt.verify(args.token, TOKEN_KEY, async (err, decoded) => {
                   if (err) {
+                      console.log(err)
                       console.log(err.message)
+                      throw new Error(errorName.EXPIRED_TOKEN)
                   }
                   if (decoded) {
-                      console.log(decoded)
+                      user = User.findByIdAndUpdate(
+                          decoded.id,
+                          {user_isActive: true}
+                      )
+                      if(!user) {
+                          throw new Error('Pas d\'utilisateur dans la base, nice try ;)')
+                      }
+                      return user
                   }
               })
     },
