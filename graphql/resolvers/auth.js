@@ -4,7 +4,12 @@ const User = require('../../models/user')
 const createCookies = require('./createCookies')
 const {emailRegex, passwordRegex, loginRegex} = require('../../helpers/regex')
 const verificationMail = require('../../middleware/sendVerificationMail')
-
+const jwt = require("jsonwebtoken");
+const {CONFIRMATION_TOKEN_EXPIRE_TIME} = require("../../helpers/tokenExpireTime");
+const {TOKEN_KEY} = require("../../helpers/tokenKey")
+// const {transformUser} = require('./merge')
+// const {log} = require("nodemon/lib/utils");
+// const {decode} = require("jsonwebtoken");
 
 module.exports = {
 
@@ -41,18 +46,30 @@ module.exports = {
             }
             const hashedPassword = await bcrypt.hash(args.userInput.user_password, 12)
 
+            const token = jwt.sign(
+                {
+                    id: _id,
+                    user_email: args.userInput.user_email,
+                    exp: Math.floor(Date.now() / 1000) + (CONFIRMATION_TOKEN_EXPIRE_TIME * 60)
+                },
+                TOKEN_KEY
+            )
+
             const user = new User({
                 user_login: args.userInput.user_login,
                 user_email: args.userInput.user_email,
                 user_password: hashedPassword,
                 user_role: 'membre',
                 user_isActive: false,
-                user_activation: 'string',
                 user_isDark: false,
             })
             const result = await user.save()
             // envoie de mail pour confirmation
-            await verificationMail.sendVerificationMail(result.user_login, result.user_email, result.user_activation)
+            await verificationMail.sendVerificationMail(
+                result.user_login,
+                result.user_email,
+                token
+            )
 
             return {
                 ...result._doc,
@@ -63,6 +80,19 @@ module.exports = {
             throw err
         }
     },
+
+    confirmUser: async(token) => {
+        console.log(token)
+              const decodedToken = await jwt.verify(token, TOKEN_KEY, async (err, decoded) => {
+                  if (err) {
+                      console.log(err.message)
+                  }
+                  if (decoded) {
+                      console.log(decoded)
+                  }
+              })
+    },
+
     /**
      * connexion
      * @param user_email

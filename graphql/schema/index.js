@@ -21,7 +21,6 @@ module.exports = buildSchema(`
             updatedAt: String!
             user_isActive: Boolean
             user_isDark: Boolean
-            user_activation: String!
         }
         
         type AuthData {
@@ -123,7 +122,6 @@ module.exports = buildSchema(`
         }
             
         input EventInput {
-
             event_name: String!
             event_date: String!
             event_desc: String!
@@ -153,6 +151,7 @@ module.exports = buildSchema(`
         type RootQuery {
             users: [User!]!
             user(_id: ID!): User!
+            confirmUser(token: String!): User
             selectUser(user_email: String!): User!
             events: [Event!]!
             clans: [Clan!]!

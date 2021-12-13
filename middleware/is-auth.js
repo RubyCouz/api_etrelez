@@ -26,8 +26,6 @@ module.exports = async (req, res, next) => {
     // vérification on a récupéré quelque chose
     if (cookie || refreshCookie) {
         let role, id, login
-
-
         if (cookie) {
             // vérificiation de la validité du token
             try {
