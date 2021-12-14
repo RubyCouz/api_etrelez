@@ -129,17 +129,17 @@ module.exports = {
             {user_email: args.user_email}
         )
         console.log(user)
-        // const token = await confirmationToken(user)
-        // console.log(token)
-        // try {
-        //     await verificationMail.sendVerificationMail(
-        //         user.user_login,
-        //         user.user_email,
-        //         token
-        //     )
-        // } catch (e) {
-        //     throw new Error(e)
-        // }
+        const token = await confirmationToken(user)
+        console.log(token)
+        try {
+            await verificationMail.sendVerificationMail(
+                user.user_login,
+                user.user_email,
+                token
+            )
+        } catch (e) {
+            throw new Error(e)
+        }
         return user
     },
 
