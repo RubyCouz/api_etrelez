@@ -5,23 +5,31 @@ const createCookies = require('./createCookies')
 const {emailRegex, passwordRegex, loginRegex} = require('../../helpers/regex')
 const verificationMail = require('../../middleware/sendVerificationMail')
 const jwt = require("jsonwebtoken");
-const {CONFIRMATION_TOKEN_EXPIRE_TIME} = require("../../helpers/tokenExpireTime");
+// const {CONFIRMATION_TOKEN_EXPIRE_TIME} = require('../../helpers/tokenExpireTime')
 const {TOKEN_KEY} = require("../../helpers/tokenKey")
-const {errorName, errorType} = require('../../errors/errorsConstant')
+const {errorName} = require('../../errors/errorsConstant')
+const {confirmationToken} = require('../../middleware/confirmationToken')
 // const {transformUser} = require('./merge')
 // const {log} = require("nodemon/lib/utils");
 // const {decode} = require("jsonwebtoken");
 
 module.exports = {
 
-    selectUser: async ({user_email}) => {
-        const existingUser = await User.findOne(
-            {user_email: user_email}
-        )
-        if (existingUser) {
-            throw new Error('Utilisateur déjà inscrit')
-        }
-    },
+    /**
+     * sélection d'un utilisateur en fonction de son mail
+     * @param user_email
+     * @returns {Promise<*>}
+     */
+    // selectUser: async ({user_email}) => {
+    //     const existingUser = await User.findOne(
+    //         {user_email: user_email}
+    //     )
+    //     if (existingUser) {
+    //         throw new Error('Utilisateur déjà inscrit')
+    //     }
+    //     return existingUser
+    // },
+
     /**
      * inscription (création utilisateur)
      * @param args
@@ -56,22 +64,14 @@ module.exports = {
                 user_isDark: false,
             })
             const result = await user.save()
+            // création du token de vérification
+            const token = confirmationToken(result)
             // envoie de mail pour confirmation
-            const token = jwt.sign(
-                {
-                    id: result._id,
-                    user_email: result.user_email,
-                    exp: Math.floor(Date.now() / 1000) + (CONFIRMATION_TOKEN_EXPIRE_TIME * 60)
-                },
-                TOKEN_KEY
-            )
-            console.log(token)
             await verificationMail.sendVerificationMail(
                 result.user_login,
                 result.user_email,
                 token
             )
-
             return {
                 ...result._doc,
                 user_password: null,
@@ -82,25 +82,65 @@ module.exports = {
         }
     },
 
-    confirmUser: async(args) => {
+    /**
+     * confirmation d'inscription
+     * @param args
+     * @returns {Promise<void>}
+     */
+    confirmUser: async (args) => {
         let user
-              const decodedToken = await jwt.verify(args.token, TOKEN_KEY, async (err, decoded) => {
-                  if (err) {
-                      console.log(err)
-                      console.log(err.message)
-                      throw new Error(errorName.EXPIRED_TOKEN)
-                  }
-                  if (decoded) {
-                      user = User.findByIdAndUpdate(
-                          decoded.id,
-                          {user_isActive: true}
-                      )
-                      if(!user) {
-                          throw new Error('Pas d\'utilisateur dans la base, nice try ;)')
-                      }
-                      return user
-                  }
-              })
+        const decodedToken = await jwt.verify(args.token, TOKEN_KEY, async (err, decoded) => {
+            if (args.token === null || args.token === '') {
+                throw new Error(errorName.TOKEN_NULL)
+            }
+            if (err.name === 'TokenExpiredError') {
+                throw new Error(errorName.EXPIRED_TOKEN)
+            }
+            if (err.name === 'JsonWebTokenError') {
+                throw new Error(errorName.WRONG_TOKEN)
+            }
+            if (err.name === 'NotBeforeError') {
+                throw new Error(errorName.NOT_BEFORE)
+            }
+            if (decoded) {
+                user = User.findByIdAndUpdate(
+                    decoded.id,
+                    {user_isActive: true}
+                )
+                if (user.user_email !== decoded.user_email) {
+                    throw new Error(errorName.WRONG_MAIL)
+                }
+                if (!user) {
+                    throw new Error(errorName.WRONG_USER)
+                }
+                return user
+            }
+        })
+    },
+
+    /**
+     * renvoie de la confirmation d'inscription
+     * @returns {Promise<void>}
+     * @param args
+     */
+    reVerify: async (args) => {
+        console.log(args)
+        const user = await User.findOne(
+            {user_email: args.user_email}
+        )
+        console.log(user)
+        // const token = await confirmationToken(user)
+        // console.log(token)
+        // try {
+        //     await verificationMail.sendVerificationMail(
+        //         user.user_login,
+        //         user.user_email,
+        //         token
+        //     )
+        // } catch (e) {
+        //     throw new Error(e)
+        // }
+        return user
     },
 
     /**

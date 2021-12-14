@@ -152,6 +152,7 @@ module.exports = buildSchema(`
             users: [User!]!
             user(_id: ID!): User!
             selectUser(user_email: String!): User!
+            reVerify(user_email: String!): User!
             events: [Event!]!
             clans: [Clan!]!
             games: [Game!]!

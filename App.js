@@ -32,8 +32,8 @@ app.use('/api', graphqlHTTP({
     rootValue: graphqlResolver,
     graphiql: true,
     customFormatErrorFn: (err) => {
+        console.log(err)
         const error = getErrorCode(err.message)
-        console.log(error)
         return({ message: error.message, status: error.statusCode})
     }
 }))
