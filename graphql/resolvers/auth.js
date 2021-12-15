@@ -7,8 +7,11 @@ const verificationMail = require('../../middleware/sendVerificationMail')
 const jwt = require("jsonwebtoken");
 // const {CONFIRMATION_TOKEN_EXPIRE_TIME} = require('../../helpers/tokenExpireTime')
 const {TOKEN_KEY} = require("../../helpers/tokenKey")
-const {errorName} = require('../../errors/errorsConstant')
+const {errorToken} = require('../../errors/errorsToken')
+const {errorForm} = require('../../errors/errorsForm')
+const {errorDb} = require('../../errors/ErrorsDb')
 const {confirmationToken} = require('../../middleware/confirmationToken')
+const {passConfirmation} = require('../../helpers/passConfirmation')
 // const {transformUser} = require('./merge')
 // const {log} = require("nodemon/lib/utils");
 // const {decode} = require("jsonwebtoken");
@@ -39,19 +42,19 @@ module.exports = {
 
         try {
             if (!emailRegex.test(args.userInput.user_email)) {
-                throw new Error('Email non valide !')
+                throw new Error(errorForm.ERROR_MAIL)
             }
             if (!passwordRegex.test(args.userInput.user_password)) {
-                throw new Error('Mot de passe non valide !')
+                throw new Error(errorForm.ERROR_PASSWORD)
             }
             if (!loginRegex.test(args.userInput.user_login)) {
-                throw new Error('Login non valide !')
+                throw new Error(errorForm.ERROR_LOGIN)
             }
             const existingUser = await User.findOne({
                 user_email: args.userInput.user_email
             })
             if (existingUser) {
-                throw new Error('Utilisateur déjà existant dans la base !!!')
+                throw new Error(errorDb.ERROR_USER)
             }
             const hashedPassword = await bcrypt.hash(args.userInput.user_password, 12)
 
@@ -64,12 +67,15 @@ module.exports = {
                 user_isDark: false,
             })
             const result = await user.save()
+            // création code secret
+            const pass = passConfirmation()
             // création du token de vérification
-            const token = confirmationToken(result)
+            const token = confirmationToken(result, pass)
             // envoie de mail pour confirmation
             await verificationMail.sendVerificationMail(
                 result.user_login,
                 result.user_email,
+                pass,
                 token
             )
             return {
@@ -91,27 +97,30 @@ module.exports = {
         let user
         const decodedToken = await jwt.verify(args.token, TOKEN_KEY, async (err, decoded) => {
             if (args.token === null || args.token === '') {
-                throw new Error(errorName.TOKEN_NULL)
+                throw new Error(errorToken.TOKEN_NULL)
             }
             if (err.name === 'TokenExpiredError') {
-                throw new Error(errorName.EXPIRED_TOKEN)
+                throw new Error(errorToken.EXPIRED_TOKEN)
             }
             if (err.name === 'JsonWebTokenError') {
-                throw new Error(errorName.WRONG_TOKEN)
+                throw new Error(errorToken.WRONG_TOKEN)
             }
             if (err.name === 'NotBeforeError') {
-                throw new Error(errorName.NOT_BEFORE)
+                throw new Error(errorToken.NOT_BEFORE)
             }
             if (decoded) {
+                if(decoded.pass !== args.token) {
+                    throw new Error(errorToken.WRONG_PASS)
+                }
                 user = User.findByIdAndUpdate(
                     decoded.id,
                     {user_isActive: true}
                 )
                 if (user.user_email !== decoded.user_email) {
-                    throw new Error(errorName.WRONG_MAIL)
+                    throw new Error(errorToken.WRONG_MAIL)
                 }
                 if (!user) {
-                    throw new Error(errorName.WRONG_USER)
+                    throw new Error(errorToken.WRONG_USER)
                 }
                 return user
             }
@@ -124,7 +133,12 @@ module.exports = {
      * @param args
      */
     reVerify: async (args) => {
-        console.log(args)
+        if(args.user_email === null || args.user_email === '') {
+            throw new Error(errorForm.ERROR_EMPTY_MAIL)
+        }
+        if(!emailRegex.test(args.user_email)) {
+            throw new Error(errorForm.ERROR_MAIL)
+        }
         const user = await User.findOne(
             {user_email: args.user_email}
         )
@@ -154,20 +168,26 @@ module.exports = {
     login: async ({user_email, user_password}, req) => {
         req.isAuth = false
         // check email
+        if(user_email === null || user_email === '') {
+            throw new Error(errorForm.ERROR_EMPTY_MAIL)
+        }
         if (!emailRegex.test(user_email)) {
-            throw new Error('Email non valide !')
+            throw new Error(errorForm.ERROR_MAIL)
         }
         const user = await User.findOne({user_email: user_email})
         if (!user) {
-            throw new Error('Cet utilisateur n\'existe pas')
+            throw new Error(errorDb.ERROR_USER)
         }
         // check password
         if (!passwordRegex.test(user_password)) {
-            throw new Error('Mot de passe non valide !')
+            throw new Error(errorForm.ERROR_PASSWORD)
+        }
+        if(user_password === '' || user.user_password === null) {
+            throw new Error(errorForm.ERROR_EMPTY_PASSWORD)
         }
         const isEqual = await bcrypt.compare(user_password, user.user_password)
         if (!isEqual) {
-            throw new Error('Le mot de passe est incorrect !!!')
+            throw new Error(errorForm.ERROR_NOT_EQUAL)
         }
         // création du token et du refresh token
         const tokens = createTokens(user)

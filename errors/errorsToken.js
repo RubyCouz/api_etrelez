@@ -6,6 +6,7 @@ exports.errorName = {
     WRONG_USER: 'WRONG_USER',
     TOKEN_NULL: 'TOKEN_NULL',
     NOT_BEFORE: 'NOT_BEFORE',
+    WRONG_PASS: 'WRONG_PASS',
 }
 exports.errorType = {
     EXPIRED_TOKEN: {
@@ -31,6 +32,11 @@ exports.errorType = {
     NOT_BEFORE: {
         message: 'Il est encore trop tôt pour activer votre compte',
         statusCode: 605
+    },
+
+    WRONG_PASS: {
+        message: 'Votre Code est incorrect',
+        statusCode: 606
     },
 }
 

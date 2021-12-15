@@ -1,4 +1,4 @@
-const {errorType, errorName} = require('./errorsConstant')
+const {errorType, errorName} = require('./errorsToken')
 
 const getErrorCode = errorName => {
     return errorType[errorName]

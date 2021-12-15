@@ -33,8 +33,10 @@ app.use('/api', graphqlHTTP({
     graphiql: true,
     customFormatErrorFn: (err) => {
         console.log(err)
-        const error = getErrorCode(err.message)
-        return({ message: error.message, status: error.statusCode})
+        if(!err !== undefined || typeof err !== "undefined") {
+            const error = getErrorCode(err.message)
+            return({ message: error.message, status: error.statusCode})
+        }
     }
 }))
 

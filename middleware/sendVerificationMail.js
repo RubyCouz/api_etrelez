@@ -2,12 +2,22 @@ const nodemailer = require('nodemailer')
 const config = require('../config.json')
 
 module.exports = {
-    sendVerificationMail: async (login, email, token) => {
+    sendVerificationMail: async (login, email, pass, token) => {
         console.log(token)
+        console.log(pass)
         const output = `
                 <h1>Bienvenue sur Eterelz, ${login}</h1>
-                <p>Pour confirmer votre inscription ,veuillez cliquer sur le lien ci-dessous :</p>
-                    <a href="http://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">Validation</a>
+                <p>
+                Saisissez le code suivante pour valider votre compte à cette adresse
+                <a href="http://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">
+                http://localhost:3000/verifyAccount/${token}
+                </a>
+                </p>
+                <a href="http://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">
+                    Valider votre compte
+                </a>
+                <p>Votre code : <span style="font-size:24px">${pass}</span></p>
+                <p></p>
             `
 
         // create reusable transporter object using the default SMTP transport
