@@ -31,8 +31,6 @@ module.exports = (req, tokens) => {
             }
         )
 
-    // stockage du refresh token en tableau
-    const arrayRefreshToken = tokens.refreshToken.split('.')
     // définition des options des cookies refresh token
     const cookieOptionsRefreshToken = {
         //domain: 'localhost:8080',
@@ -40,19 +38,14 @@ module.exports = (req, tokens) => {
         expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRE_TIME * 60 * 1000),
         sameSite: "Lax",
         //secure: true,
+        httpOnly: true,
     }
+
     // stockage du refresh token dans cookie
     req.res
-        .cookie('jwt_HP_RT', arrayRefreshToken[0] + '.' + arrayRefreshToken[1],
+        .cookie('jwt_RT', tokens.refreshToken,
             {
-                ...cookieOptionsRefreshToken,
+                ...cookieOptionsRefreshToken
             }
         )
-        .cookie('jwt_S_RT', '.' + arrayRefreshToken[2],
-            {
-                ...cookieOptionsRefreshToken,
-                httpOnly: true,
-            }
-        )
-
 }
