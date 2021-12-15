@@ -24,7 +24,8 @@ module.exports = buildSchema(`
         }
         
         type AuthData {
-            token: String!
+            auth: Boolean!
+            access_Token: String
         }
         
         type Event {
@@ -158,6 +159,7 @@ module.exports = buildSchema(`
             streams: [Stream!]!
             engagements: [Engagement!]!
             login(user_login: String, user_email: String!, user_password: String!): AuthData!
+            refreshToken: AuthData
         }
         
         type RootMutation {

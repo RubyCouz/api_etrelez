@@ -112,11 +112,12 @@ module.exports = {
      * @returns {Promise<{token: (*)}>}
      */
     login: async ({user_email, user_password}, req) => {
-        req.isAuth = false
+        req.isAuth.valid = false
         // check email
         if (!emailRegex.test(user_email)) {
             throw new Error('Email non valide !')
         }
+
         const user = await User.findOne({user_email: user_email})
         if (!user) {
             throw new Error('Cet utilisateur n\'existe pas')
@@ -133,14 +134,27 @@ module.exports = {
         const tokens = createTokens(user)
 
         if (tokens) {
-            req.isAuth = true
+             req.isAuth.valid = true
         }
 
         createCookies(req, tokens)
 
         return {
-            token: tokens.token,
-            refreshToken: tokens.refreshToken,
+            auth: req.isAuth.valid,
+            access_Token: tokens.token,
+        }
+    },
+
+    /**
+    * Vérifie on est toujours authentifier
+    * @param {*} arg 
+    * @param {*} req 
+    * @returns {Object}  return si le token est valide
+    */
+    refreshToken: async (arg, req) =>{
+
+        return { 
+            auth: req.isAuth.valid,
         }
     },
 }
