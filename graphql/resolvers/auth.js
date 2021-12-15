@@ -87,51 +87,65 @@ module.exports = {
     /**
      * confirmation d'inscription
      * @param args
+     * @param req
      * @returns {Promise<void>}
      */
-    confirmUser: async (args) => {
-        console.log(args)
+    confirmUser: async (args, req) => {
         let user
         const decodedToken = await jwt.verify(args.token, TOKEN_KEY, async (err, decoded) => {
             if (args.token === null || args.token === '') {
                 throw new Error(errorToken.TOKEN_NULL)
             }
             if(err) {
-                console.log(err)
                 if (err.name === 'TokenExpiredError') {
                     throw new Error(errorToken.EXPIRED_TOKEN)
                 }
-                console.log(err.name)
                 if (err.name === 'JsonWebTokenError') {
                     throw new Error(errorToken.WRONG_TOKEN)
                 }
-                console.log(err.name)
                 if (err.name === 'NotBeforeError') {
                     throw new Error(errorToken.NOT_BEFORE)
                 }
-                console.log(err.name)
             }
             // if(!tokenRegex.test(args.pass)) {
             //     throw new Error(errorToken.WRONG_PASS)
             // }
             if (decoded) {
-                if(decoded.pass !== args.pass) {
+                if (decoded.pass !== args.pass) {
                     throw new Error(errorToken.WRONG_PASS)
                 }
                 user = await User.findById(decoded.id)
+                console.log(user)
                 if (!user) {
                     throw new Error(errorToken.WRONG_USER)
                 }
                 if (user.user_email !== decoded.user_email) {
                     throw new Error(errorToken.WRONG_MAIL)
                 }
-                user = User.findByIdAndUpdate(
+                user = await User.findByIdAndUpdate(
                     decoded.id,
                     {user_isActive: true}
                 )
-                return user
             }
         })
+
+        console.log(user)
+        console.log('-----------------------------------------------------')
+        // création du token et du refresh token
+        const tokens = createTokens(user)
+        req.isAuth = false
+        if (tokens) {
+            req.isAuth = true
+        }
+        console.log(req.isAuth)
+        console.log('-----------------------------------------------------')
+        console.log(tokens)
+        createCookies(req, tokens)
+
+        return {
+            token: tokens.token,
+            refreshToken: tokens.refreshToken,
+        }
     },
 
     /**

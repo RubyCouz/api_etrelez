@@ -163,7 +163,7 @@ module.exports = buildSchema(`
         
         type RootMutation {
             createUser(userInput: UserInput): User
-            confirmUser(token: String!, pass: String!): User
+            confirmUser(token: String!, pass: String!): AuthData!
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event
             updateEvent(id: ID!,updateEventInput: UpdateEventInput): Event
