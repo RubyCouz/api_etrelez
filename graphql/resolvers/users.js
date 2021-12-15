@@ -40,8 +40,12 @@ module.exports = {
    * @returns {Promise<*&{createdAt: string, user_createdEvent: *, user_stream: *, _id: *, user_game_played: *, user_clan: *, updatedAt: string}>}
    */
   updateUser: async ({ _id: _id, updateUserInput }, req) => {
-    if(!req.isAuth.valid && !(req.isAuth.userRole === "admin" || req.isAuth.userId === _id))  {
-      throw new Error('Non !')
+    if(!req.isAuth.valid)  {
+      throw new Error('UNAUTHENTICATED')
+    }
+
+    if (!(req.isAuth.userRole === "admin" || req.isAuth.userId === _id)) {
+      throw new Error('Pas le droit!')
     }
 
     try {
