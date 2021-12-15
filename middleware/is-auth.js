@@ -16,16 +16,16 @@ module.exports = async (req, res, next) => {
     // récupération du champs 'Authorization'
     const cookie = (
         (req.cookies.jwt_HP && req.cookies.jwt_S) ?
-            (req.cookies.jwt_HP + req.cookies.jwt_S) :
-            false)
-    const refreshCookie = (
-        (req.cookies.jwt_HP_RT && req.cookies.jwt_S_RT) ?
-            (req.cookies.jwt_HP_RT + req.cookies.jwt_S_RT) :
-            false)
+            (req.cookies.jwt_HP + req.cookies.jwt_S)
+        :
+            false
+    )
+    const refreshCookie = req.cookies.jwt_RT ? req.cookies.jwt_RT : false
 
     // vérification on a récupéré quelque chose
-    if (cookie || refreshCookie) {
+    if (cookie) {
         let role, id, login
+
         if (cookie) {
             // vérificiation de la validité du token
             try {
