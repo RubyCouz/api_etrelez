@@ -8,7 +8,6 @@ const isAuth = require('./middleware/is-auth')
 const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
 const getErrorCode = require("./errors/errors");
-const {log} = require("nodemon/lib/utils");
 const app = express()
 
 app.use(express.static(__dirname + '/Public'))

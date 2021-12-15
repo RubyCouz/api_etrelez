@@ -2,19 +2,15 @@ const createTokens = require('./createTokens')
 const bcrypt = require('bcryptjs')
 const User = require('../../models/user')
 const createCookies = require('./createCookies')
-const {emailRegex, passwordRegex, loginRegex} = require('../../helpers/regex')
+const {emailRegex, passwordRegex, loginRegex, tokenRegex} = require('../../helpers/regex')
 const verificationMail = require('../../middleware/sendVerificationMail')
 const jwt = require("jsonwebtoken");
-// const {CONFIRMATION_TOKEN_EXPIRE_TIME} = require('../../helpers/tokenExpireTime')
 const {TOKEN_KEY} = require("../../helpers/tokenKey")
 const {errorToken} = require('../../errors/errorsToken')
 const {errorForm} = require('../../errors/errorsForm')
 const {errorDb} = require('../../errors/ErrorsDb')
 const {confirmationToken} = require('../../middleware/confirmationToken')
 const {passConfirmation} = require('../../helpers/passConfirmation')
-// const {transformUser} = require('./merge')
-// const {log} = require("nodemon/lib/utils");
-// const {decode} = require("jsonwebtoken");
 
 module.exports = {
 
@@ -94,34 +90,45 @@ module.exports = {
      * @returns {Promise<void>}
      */
     confirmUser: async (args) => {
+        console.log(args)
         let user
         const decodedToken = await jwt.verify(args.token, TOKEN_KEY, async (err, decoded) => {
             if (args.token === null || args.token === '') {
                 throw new Error(errorToken.TOKEN_NULL)
             }
-            if (err.name === 'TokenExpiredError') {
-                throw new Error(errorToken.EXPIRED_TOKEN)
+            if(err) {
+                console.log(err)
+                if (err.name === 'TokenExpiredError') {
+                    throw new Error(errorToken.EXPIRED_TOKEN)
+                }
+                console.log(err.name)
+                if (err.name === 'JsonWebTokenError') {
+                    throw new Error(errorToken.WRONG_TOKEN)
+                }
+                console.log(err.name)
+                if (err.name === 'NotBeforeError') {
+                    throw new Error(errorToken.NOT_BEFORE)
+                }
+                console.log(err.name)
             }
-            if (err.name === 'JsonWebTokenError') {
-                throw new Error(errorToken.WRONG_TOKEN)
-            }
-            if (err.name === 'NotBeforeError') {
-                throw new Error(errorToken.NOT_BEFORE)
-            }
+            // if(!tokenRegex.test(args.pass)) {
+            //     throw new Error(errorToken.WRONG_PASS)
+            // }
             if (decoded) {
-                if(decoded.pass !== args.token) {
+                if(decoded.pass !== args.pass) {
                     throw new Error(errorToken.WRONG_PASS)
+                }
+                user = await User.findById(decoded.id)
+                if (!user) {
+                    throw new Error(errorToken.WRONG_USER)
+                }
+                if (user.user_email !== decoded.user_email) {
+                    throw new Error(errorToken.WRONG_MAIL)
                 }
                 user = User.findByIdAndUpdate(
                     decoded.id,
                     {user_isActive: true}
                 )
-                if (user.user_email !== decoded.user_email) {
-                    throw new Error(errorToken.WRONG_MAIL)
-                }
-                if (!user) {
-                    throw new Error(errorToken.WRONG_USER)
-                }
                 return user
             }
         })
@@ -142,13 +149,12 @@ module.exports = {
         const user = await User.findOne(
             {user_email: args.user_email}
         )
-        console.log(user)
-        const token = await confirmationToken(user)
-        console.log(token)
+        const token = await confirmationToken(user, args.pass)
         try {
             await verificationMail.sendVerificationMail(
                 user.user_login,
                 user.user_email,
+                args.pass,
                 token
             )
         } catch (e) {

@@ -152,7 +152,7 @@ module.exports = buildSchema(`
             users: [User!]!
             user(_id: ID!): User!
             selectUser(user_email: String!): User!
-            reVerify(user_email: String!): User!
+            reVerify(user_email: String!, pass: String!): User!
             events: [Event!]!
             clans: [Clan!]!
             games: [Game!]!
@@ -163,7 +163,7 @@ module.exports = buildSchema(`
         
         type RootMutation {
             createUser(userInput: UserInput): User
-            confirmUser(token: String!): User
+            confirmUser(token: String!, pass: String!): User
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event
             updateEvent(id: ID!,updateEventInput: UpdateEventInput): Event

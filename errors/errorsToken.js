@@ -1,5 +1,5 @@
 // expiration du token
-exports.errorName = {
+exports.errorToken = {
     EXPIRED_TOKEN: 'EXPIRED_TOKEN',
     WRONG_MAIL: 'WRONG_MAIL',
     WRONG_TOKEN: 'WRONG_TOKEN',
