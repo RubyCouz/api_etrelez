@@ -156,6 +156,7 @@ module.exports = buildSchema(`
             events: [Event!]!
             clans: [Clan!]!
             games: [Game!]!
+            userGame: [UserGame]
             streams: [Stream!]!
             engagements: [Engagement!]!
             login(user_login: String, user_email: String!, user_password: String!): AuthData!

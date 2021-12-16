@@ -1,4 +1,4 @@
-exports.errorName = {
+exports.errorForm = {
     ERROR_MAIL: 'ERROR_MAIL',
     ERROR_EMPTY_MAIL: 'ERROR_EMPTY_MAIL',
     ERROR_PASSWORD: 'ERROR_PASSWORD',
