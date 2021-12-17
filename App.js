@@ -31,10 +31,11 @@ app.use('/api', graphqlHTTP({
     rootValue: graphqlResolver,
     graphiql: true,
     customFormatErrorFn: (err) => {
-        console.log(err)
+        console.log('1 : [' + err + ']')
         if (err !== undefined || typeof err !== undefined) {
+            console.log(err.message)
             const error = getErrorCode(err.message)
-            console.log(error)
+            console.log('2 : ' + error )
                 return ({message: error.message, status: error.statusCode})
             }
     }

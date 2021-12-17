@@ -6,9 +6,7 @@ const {emailRegex, passwordRegex, loginRegex, tokenRegex} = require('../../helpe
 const verificationMail = require('../../middleware/sendVerificationMail')
 const jwt = require("jsonwebtoken");
 const {TOKEN_KEY} = require("../../helpers/tokenKey")
-const {errorToken} = require('../../errors/errorsToken')
-const {errorForm} = require('../../errors/errorsForm')
-const {errorDb} = require('../../errors/ErrorsDb')
+const {errorName} = require('../../errors/errorsName')
 const {confirmationToken} = require('../../middleware/confirmationToken')
 const {passConfirmation} = require('../../helpers/passConfirmation')
 
@@ -38,19 +36,19 @@ module.exports = {
 
         try {
             if (!emailRegex.test(args.userInput.user_email)) {
-                throw new Error(errorForm.ERROR_MAIL)
+                throw new Error(errorName.ERROR_MAIL)
             }
             if (!passwordRegex.test(args.userInput.user_password)) {
-                throw new Error(errorForm.ERROR_PASSWORD)
+                throw new Error(errorName.ERROR_PASSWORD)
             }
             if (!loginRegex.test(args.userInput.user_login)) {
-                throw new Error(errorForm.ERROR_LOGIN)
+                throw new Error(errorName.ERROR_LOGIN)
             }
             const existingUser = await User.findOne({
                 user_email: args.userInput.user_email
             })
             if (existingUser) {
-                throw new Error(errorDb.ERROR_USER)
+                throw new Error(errorName.ERROR_USER)
             }
             const hashedPassword = await bcrypt.hash(args.userInput.user_password, 12)
 
@@ -88,23 +86,23 @@ module.exports = {
      * confirmation d'inscription
      * @param args
      * @param req
-     * @returns {Promise<void>}
+     * @returns {Promise<{token: (*), refreshToken: (*)}>}
      */
     confirmUser: async (args, req) => {
         let user
         const decodedToken = await jwt.verify(args.token, TOKEN_KEY, async (err, decoded) => {
             if (args.token === null || args.token === '') {
-                throw new Error(errorToken.TOKEN_NULL)
+                throw new Error(errorName.TOKEN_NULL)
             }
-            if(err) {
+            if (err) {
                 if (err.name === 'TokenExpiredError') {
-                    throw new Error(errorToken.EXPIRED_TOKEN)
+                    throw new Error(errorName.EXPIRED_TOKEN)
                 }
                 if (err.name === 'JsonWebTokenError') {
-                    throw new Error(errorToken.WRONG_TOKEN)
+                    throw new Error(errorName.WRONG_TOKEN)
                 }
                 if (err.name === 'NotBeforeError') {
-                    throw new Error(errorToken.NOT_BEFORE)
+                    throw new Error(errorName.NOT_BEFORE)
                 }
             }
             // if(!tokenRegex.test(args.pass)) {
@@ -112,15 +110,15 @@ module.exports = {
             // }
             if (decoded) {
                 if (decoded.pass !== args.pass) {
-                    throw new Error(errorToken.WRONG_PASS)
+                    throw new Error(errorName.WRONG_PASS)
                 }
                 user = await User.findById(decoded.id)
                 console.log(user)
                 if (!user) {
-                    throw new Error(errorToken.WRONG_USER)
+                    throw new Error(errorName.WRONG_USER)
                 }
                 if (user.user_email !== decoded.user_email) {
-                    throw new Error(errorToken.WRONG_MAIL)
+                    throw new Error(errorName.WRONG_MAIL)
                 }
                 user = await User.findByIdAndUpdate(
                     decoded.id,
@@ -154,11 +152,11 @@ module.exports = {
      * @param args
      */
     reVerify: async (args) => {
-        if(args.user_email === null || args.user_email === '') {
-            throw new Error(errorForm.ERROR_EMPTY_MAIL)
+        if (args.user_email === null || args.user_email === '') {
+            throw new Error(errorName.ERROR_EMPTY_MAIL)
         }
-        if(!emailRegex.test(args.user_email)) {
-            throw new Error(errorForm.ERROR_MAIL)
+        if (!emailRegex.test(args.user_email)) {
+            throw new Error(errorName.ERROR_MAIL)
         }
         const user = await User.findOne(
             {user_email: args.user_email}
@@ -181,43 +179,44 @@ module.exports = {
      * connexion
      * @param user_email
      * @param user_password
-     * @param stay_logged
      * @param req
      * @returns {Promise<{token: (*)}>}
      */
     login: async ({user_email, user_password}, req) => {
+        console.log('email :' + user_email)
+        console.log('--------------------------------------------')
+        console.log('mdp : ' + user_password)
         req.isAuth = false
         // check email
-        if(user_email === null || user_email === '') {
-            throw new Error(errorForm.ERROR_EMPTY_MAIL)
+        if (user_email === null || user_email === '') {
+            throw new Error(errorName.ERROR_EMPTY_MAIL)
         }
         if (!emailRegex.test(user_email)) {
-            throw new Error(errorForm.ERROR_MAIL)
+            throw new Error(errorName.ERROR_MAIL)
         }
         const user = await User.findOne({user_email: user_email})
         if (!user) {
-            throw new Error(errorDb.ERROR_USER)
+            throw new Error(errorName.ERROR_USER)
         }
-        // check password
         if (!passwordRegex.test(user_password)) {
-            throw new Error(errorForm.ERROR_PASSWORD)
+            throw new Error(errorName.ERROR_PASSWORD)
         }
-        if(user_password === '' || user.user_password === null) {
-            throw new Error(errorForm.ERROR_EMPTY_PASSWORD)
+        if (user_password === '' || user.user_password === null) {
+            throw new Error(errorName.ERROR_EMPTY_PASSWORD)
         }
         const isEqual = await bcrypt.compare(user_password, user.user_password)
         if (!isEqual) {
-            throw new Error(errorForm.ERROR_NOT_EQUAL)
+            throw new Error(errorName.ERROR_NOT_EQUAL)
         }
         // création du token et du refresh token
         const tokens = createTokens(user)
-
         if (tokens) {
             req.isAuth = true
+
         }
-
         createCookies(req, tokens)
-
+        console.log('--------------------------------')
+        console.log(tokens)
         return {
             token: tokens.token,
             refreshToken: tokens.refreshToken,

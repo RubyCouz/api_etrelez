@@ -159,7 +159,7 @@ module.exports = buildSchema(`
             userGame: [UserGame]
             streams: [Stream!]!
             engagements: [Engagement!]!
-            login(user_login: String, user_email: String!, user_password: String!): AuthData!
+            login(user_email: String!, user_password: String!): AuthData!
         }
         
         type RootMutation {
