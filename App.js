@@ -7,7 +7,7 @@ const graphqlResolver = require('./graphql/resolvers/index')
 const isAuth = require('./middleware/is-auth')
 const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
-const getErrorCode = require("./errors/errors");
+const getErrorCode = require('./errors/errors')
 const app = express()
 
 app.use(express.static(__dirname + '/Public'))
@@ -21,6 +21,7 @@ app.use((req, res, next) => {
     if (req.method === 'OPTIONS') {
         return res.sendStatus(200)
     }
+
     next()
 })
 
@@ -31,14 +32,10 @@ app.use('/api', graphqlHTTP({
     rootValue: graphqlResolver,
     graphiql: true,
     customFormatErrorFn: (err) => {
-        console.log('1 : [' + err + ']')
-        if (err !== undefined || typeof err !== undefined) {
-            console.log(err.message)
-            const error = getErrorCode(err.message)
-            console.log('2 : ' + error )
-                return ({message: error.message, status: error.statusCode})
-            }
-    }
+        console.log('err : ' + err)
+    const error = getErrorCode(err.message)
+    return ({ message: error.message, statusCode: error.statusCode })
+}
 }))
 
 app.post('/upload/game', upload)

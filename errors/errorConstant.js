@@ -95,6 +95,10 @@ exports.errorType = {
         message: 'Cet utilisateur n\'existe pas dans le base de données',
         statusCode: 800
     },
+    ERROR_PASSWORD_DB: {
+        message: 'Mot de passe erroné',
+        statusCode: 800
+    },
 }
 
 
