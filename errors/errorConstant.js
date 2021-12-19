@@ -99,6 +99,7 @@ exports.errorType = {
         message: 'Mot de passe erroné',
         statusCode: 800
     },
+
 }
 
 

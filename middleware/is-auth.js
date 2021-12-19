@@ -10,7 +10,8 @@ module.exports = async (req, res, next) => {
         valid: false,
         userRole: null,
         userId: null,
-        login: null
+        login: null,
+        is_active: null
     }
 
     // récupération du champs 'Authorization'
@@ -25,7 +26,7 @@ module.exports = async (req, res, next) => {
 
     // vérification on a récupéré quelque chose
     if (cookie || refreshCookie) {
-        let role, id, login
+        let role, id, login, is_active
         if (cookie) {
             // vérificiation de la validité du token
             try {
@@ -34,6 +35,7 @@ module.exports = async (req, res, next) => {
                 id = decodedToken.userId
                 role = decodedToken.userRole
                 login = decodedToken.userLogin
+                is_active = decodedToken.is_active
 
             } catch (err) {
                 return next()
@@ -58,13 +60,15 @@ module.exports = async (req, res, next) => {
             id = user.id
             role = user.user_role
             login = user.user_login
+            is_active = user.user_isActive
         }
 
         req.isAuth = {
             valid: true,
             userRole: role,
             userId: id,
-            userLogin: login
+            userLogin: login,
+            is_active: is_active
         }
     }
 

@@ -203,8 +203,6 @@ module.exports = {
             req.isAuth = true
         }
         createCookies(req, tokens)
-        console.log('--------------------------------')
-        console.log(tokens)
         return {
             token: tokens.token,
             refreshToken: tokens.refreshToken,
