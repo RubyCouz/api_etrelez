@@ -32,7 +32,7 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     createUser: async (args) => {
-
+        console.log(args)
         try {
             if (!emailRegex.test(args.userInput.user_email)) {
                 throw new Error(errorName.ERROR_MAIL)
