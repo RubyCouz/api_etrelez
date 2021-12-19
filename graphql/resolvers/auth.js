@@ -184,12 +184,9 @@ module.exports = {
             throw new Error(errorName.ERROR_MAIL)
         }
         const user = await User.findOne({user_email: user_email})
-        console.log(user)
-        console.log(user.user_isActive)
         if (!user) {
             throw new Error(errorName.ERROR_USER)
         }
-
         if(!user.user_isActive) {
             throw new Error(errorName.ISACTIVE)
         }
