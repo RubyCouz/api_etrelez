@@ -23,7 +23,11 @@ exports.errorName = {
     /**
      * DB
      */
-    ERROR_USER: 'ERROR_USER'
+    ERROR_USER: 'ERROR_USER',
+    /**
+     * connection
+     */
+    ISACTIVE: 'ISACTIVE'
 }
 exports.errorType = {
     /**
@@ -99,7 +103,12 @@ exports.errorType = {
         message: 'Mot de passe erroné',
         statusCode: 800
     },
-
+    /**
+     * connection
+     */
+    ISACTIVE: {
+        message: 'Vous devez valider votre compte avant de vous connecter. Vérifier la réception d\'un email de confirmation dans votre messagerie'
+    }
 }
 
 

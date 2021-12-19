@@ -178,20 +178,26 @@ module.exports = {
         req.isAuth = false
         // check email
         if (user_email === null || user_email === '') {
-        throw new Error(errorName.ERROR_EMPTY_MAIL)
+            throw new Error(errorName.ERROR_EMPTY_MAIL)
         }
         if (!emailRegex.test(user_email)) {
-        throw new Error(errorName.ERROR_MAIL)
+            throw new Error(errorName.ERROR_MAIL)
         }
-            const user = await User.findOne({user_email: user_email})
-            if(!user) {
-                throw new Error(errorName.ERROR_USER)
-            }
+        const user = await User.findOne({user_email: user_email})
+        console.log(user)
+        console.log(user.user_isActive)
+        if (!user) {
+            throw new Error(errorName.ERROR_USER)
+        }
+
+        if(!user.user_isActive) {
+            throw new Error(errorName.ISACTIVE)
+        }
         if (!passwordRegex.test(user_password)) {
-        throw new Error(errorName.ERROR_PASSWORD)
+            throw new Error(errorName.ERROR_PASSWORD)
         }
         if (user_password === '' || user.user_password === null) {
-        throw new Error(errorName.ERROR_NOT_EQUAL)
+            throw new Error(errorName.ERROR_NOT_EQUAL)
         }
         const isEqual = await bcrypt.compare(user_password, user.user_password)
         if (!isEqual) {
