@@ -20,7 +20,6 @@ module.exports = buildSchema(`
             createdAt: String!
             updatedAt: String!
             user_isActive: Boolean
-            user_isDark: Boolean
         }
         
         type AuthData {
@@ -118,7 +117,6 @@ module.exports = buildSchema(`
             user_state: String 
             updatedAt: String
             user_isActive: Boolean
-            user_isDark: Boolean
         }
             
         input EventInput {
