@@ -1,6 +1,10 @@
 // expiration du token
 exports.errorName = {
     /**
+     * erreur de permission
+     */
+    PERMISSION_ERROR: 'PERMISSION_ERROR',
+    /**
      * token
      */
     EXPIRED_TOKEN: 'EXPIRED_TOKEN',
@@ -27,9 +31,20 @@ exports.errorName = {
     /**
      * connection
      */
-    ISACTIVE: 'ISACTIVE'
+    ISACTIVE: 'ISACTIVE',
+    /**
+     * jeux
+     */
+    GAME_NOT_EXIST: 'GAME_NOT_EXIST'
 }
 exports.errorType = {
+    /**
+     * erreur de permission
+     */
+    PERMISSION_ERROR: {
+        message: 'Vous n\'avez pas la permission d\'effectuer cette action',
+        statusCode: '100'
+    },
     /**
      * token
      */
@@ -108,6 +123,12 @@ exports.errorType = {
      */
     ISACTIVE: {
         message: 'Vous devez valider votre compte avant de vous connecter. Vérifier la réception d\'un email de confirmation dans votre messagerie'
+    },
+    /**
+     * jeux
+     */
+    GAME_NOT_EXIST: {
+        message: 'Ce jeux n\'est pas encore enregistré'
     }
 }
 

@@ -213,7 +213,6 @@ module.exports = {
     },
 
     createdByAdmin: async (args) => {
-        console.log(args)
         try {
             if (!emailRegex.test(args.email)) {
                 throw new Error(errorName.ERROR_MAIL)

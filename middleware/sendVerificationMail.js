@@ -3,8 +3,6 @@ const config = require('../config.json')
 
 module.exports = {
     sendVerificationMail: async (login, email, pass, token) => {
-        console.log(token)
-        console.log(pass)
         const output = `
                 <h1>Bienvenue sur Eterelz, ${login}</h1>
                 <p>

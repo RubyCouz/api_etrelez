@@ -1,6 +1,7 @@
 const Game = require('../../models/game')
 const User = require('../../models/user')
 const {transformGame} = require('./merge')
+const {errorName} = require('../../errors/errorConstant')
 
 module.exports = {
     /**
@@ -32,7 +33,6 @@ module.exports = {
         // définition d'un tableau contenant les données validées par la fonction de validation
         let validData = []
         const verifData = (regex, data) => {
-            console.log(regexText)
             if (regex.test(data)) {
                 data.trim()
                 validData.push(data)
@@ -70,4 +70,33 @@ module.exports = {
             }
         }
     },
+    /**
+     * Modification des informations d'un jeu
+     * @param _id
+     * @param updateGameInput
+     * @param req
+     * @returns {Promise<*&{createdAt: string, _id: *, game_creator: *, updatedAt: string}>}
+     */
+    updateGame: async ({_id, GameInput}, req) => {
+        if(!req.isAuth.valid && !(req.isAuth.userRole === "admin" || req.isAuth.userId === _id))  {
+            throw new Error(errorName.PERMISSION_ERROR)
+        }
+        try {
+            const game = await Game.findById(_id)
+            if(!game) {
+                throw new Error(errorName.GAME_NOT_EXIST)
+            } else {
+                Game.findOneAndUpdate(
+                    {_id: _id},
+                    GameInput,
+                    function(err, doc) {
+                        if(err) return res.send(500, {error: err})
+                }
+                )
+            }
+        return transformGame(game)
+        } catch (e) {
+            throw e
+        }
+    }
 }

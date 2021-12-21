@@ -141,6 +141,12 @@ module.exports = buildSchema(`
             game_pic: String
         }
         
+        input GameUpdateInput {
+            game_name: String!
+            game_desc: String!
+            game_pic: String!
+        }
+        
         input StreamInput {
             stream_url: String!
             stream_support: String!
@@ -180,6 +186,7 @@ module.exports = buildSchema(`
             cancelJoinClan(clanId: ID!): Clan!
             cancelJoining(engagementId: ID!): Event!
             updateUser(_id: ID!, updateUserInput: UserUpdateInput): User!
+            updateGame(_id: ID!, GameInput: GameUpdateInput): Game!
             
         }
         
