@@ -162,6 +162,7 @@ module.exports = buildSchema(`
         
         type RootMutation {
             createUser(userInput: UserInput): User
+            createdByAdmin(email: String!): User
             confirmUser(token: String!, pass: String!): AuthData!
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event

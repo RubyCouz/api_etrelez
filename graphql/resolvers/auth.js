@@ -9,6 +9,7 @@ const {TOKEN_KEY} = require("../../helpers/tokenKey")
 const {errorName} = require('../../errors/errorConstant')
 const {confirmationToken} = require('../../middleware/confirmationToken')
 const {passConfirmation} = require('../../helpers/passConfirmation')
+const signupMail = require('../../middleware/signupMail')
 module.exports = {
 
     /**
@@ -57,7 +58,6 @@ module.exports = {
                 user_password: hashedPassword,
                 user_role: 'membre',
                 user_isActive: false,
-                user_isDark: false,
             })
             const result = await user.save()
             // création code secret
@@ -187,7 +187,7 @@ module.exports = {
         if (!user) {
             throw new Error(errorName.ERROR_USER)
         }
-        if(!user.user_isActive) {
+        if (!user.user_isActive) {
             throw new Error(errorName.ISACTIVE)
         }
         if (!passwordRegex.test(user_password)) {
@@ -211,4 +211,40 @@ module.exports = {
             refreshToken: tokens.refreshToken,
         }
     },
+
+    createdByAdmin: async (args) => {
+        console.log(args)
+        try {
+            if (!emailRegex.test(args.email)) {
+                throw new Error(errorName.ERROR_MAIL)
+            }
+            const existingUser = await User.findOne({
+                user_email: args.email
+            })
+            if (existingUser) {
+                throw new Error(errorName.ERROR_USER)
+            }
+            const hashedPassword = await bcrypt.hash('PasswordByDefault', 12)
+                const user = new User({
+                    user_login: 'Anonyme',
+                    user_email: args.email,
+                    user_password: hashedPassword,
+                    user_role: 'membre',
+                    user_isActive: false,
+                })
+            const result = await user.save()
+            // création code secret
+            const pass = passConfirmation()
+            // création du token de vérification
+            const token = confirmationToken(args.email, pass)
+            // envoie de mail pour confirmation
+            await signupMail.signupMail(
+                args.email,
+                pass,
+                token
+            )
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
