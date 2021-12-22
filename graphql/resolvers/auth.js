@@ -10,6 +10,7 @@ const {errorName} = require('../../errors/errorConstant')
 const {confirmationToken} = require('../../middleware/confirmationToken')
 const {passConfirmation} = require('../../helpers/passConfirmation')
 const signupMail = require('../../middleware/signupMail')
+const {validForm} = require('../../middleware/validForm')
 module.exports = {
 
     /**
@@ -33,17 +34,8 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     createUser: async (args) => {
-        console.log(args)
+        validForm(args.userInput)
         try {
-            if (!emailRegex.test(args.userInput.user_email)) {
-                throw new Error(errorName.ERROR_MAIL)
-            }
-            if (!passwordRegex.test(args.userInput.user_password)) {
-                throw new Error(errorName.ERROR_PASSWORD)
-            }
-            if (!loginRegex.test(args.userInput.user_login)) {
-                throw new Error(errorName.ERROR_LOGIN)
-            }
             const existingUser = await User.findOne({
                 user_email: args.userInput.user_email
             })
@@ -104,9 +96,6 @@ module.exports = {
                     throw new Error(errorName.NOT_BEFORE)
                 }
             }
-            // if(!tokenRegex.test(args.pass)) {
-            //     throw new Error(errorToken.WRONG_PASS)
-            // }
             if (decoded) {
                 if (decoded.pass !== args.pass) {
                     throw new Error(errorName.WRONG_PASS)
@@ -180,18 +169,14 @@ module.exports = {
         if (user_email === null || user_email === '') {
             throw new Error(errorName.ERROR_EMPTY_MAIL)
         }
-        if (!emailRegex.test(user_email)) {
-            throw new Error(errorName.ERROR_MAIL)
-        }
+        validForm({user_email, user_password})
+
         const user = await User.findOne({user_email: user_email})
         if (!user) {
             throw new Error(errorName.ERROR_USER)
         }
         if (!user.user_isActive) {
             throw new Error(errorName.ISACTIVE)
-        }
-        if (!passwordRegex.test(user_password)) {
-            throw new Error(errorName.ERROR_PASSWORD)
         }
         if (user_password === '' || user.user_password === null) {
             throw new Error(errorName.ERROR_NOT_EQUAL)
@@ -215,7 +200,7 @@ module.exports = {
     createdByAdmin: async (args) => {
         try {
             if (!emailRegex.test(args.email)) {
-                throw new Error(errorName.ERROR_MAIL)
+                throw new Error(errorName.user_email)
             }
             const existingUser = await User.findOne({
                 user_email: args.email

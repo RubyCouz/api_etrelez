@@ -164,7 +164,7 @@ const transformUser = userObject => {
         ...userObject._doc,
         _id: userObject.id,
         user_createdEvent: events.bind(this, userObject._doc.user_createdEvent),
-        user_clan: clans.bind(this, userObject._doc. user_createdClans),
+        user_clan: clans.bind(this, userObject._doc.user_createdClans),
         user_stream: streams.bind(this, userObject._doc.user_stream),
         user_game_played: games.bind(this, userObject._doc.user_addedGames),
         createdAt: dateToString(userObject._doc.createdAt),
@@ -230,8 +230,11 @@ const transformClan = clan => {
     return {
         ...clan._doc,
         _id: clan.id,
+        clan_creator: user.bind(this, clan._doc.clan_creator),
         clan_members: user.bind(this, clan._doc.clan_members),
-        clan_game: games.bind(this, clan._doc.clan_game)
+        clan_game: games.bind(this, clan._doc.clan_game),
+        createdAt: dateToString(clan._doc.createdAt),
+        updatedAt: dateToString(clan._doc.createdAt)
     }
 }
 

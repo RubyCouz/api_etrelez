@@ -3,6 +3,7 @@ const Clan = require('../../models/clan')
 const Game = require('../../models/game')
 
 const {transformClan} = require('./merge')
+const {errorName} = require("../../errors/errorConstant");
 
 module.exports = {
     /**
@@ -12,7 +13,7 @@ module.exports = {
     clans: async () => {
         try {
             const clans = await Clan.find()
-            return clans.map(clan=> {
+            return clans.map(clan => {
                 return transformClan(clan)
             })
         } catch (err) {
@@ -27,7 +28,7 @@ module.exports = {
      */
     createClan: async (args, req) => {
         if (!req.isAuth.valid) {
-            throw new Error('Vous devez vous connecter !!!')
+            throw new Error(errorName.PERMISSION_ERROR)
         }
         const clan = new Clan({
             clan_name: args.clanInput.clan_name,
@@ -36,7 +37,8 @@ module.exports = {
             clan_discord: args.clanInput.clan_discord,
             clan_population: args.clanInput.clan_population,
             clan_recrut: args.clanInput.clan_recrut,
-            clan_activity: args.clanInput.clan_activity
+            clan_activity: args.clanInput.clan_activity,
+            clan_creator: req.isAuth.userId
         })
         let user_createdClan
 
@@ -44,11 +46,11 @@ module.exports = {
             const result = await clan.save()
             user_createdClan = transformClan(result)
             const clan_creator = await User.findById(req.isAuth.userId)
-
-            if(!clan_creator) {
+            if (!clan_creator) {
                 throw new Error('Utilisateur introuvable !!!')
             }
-        clan_creator.user_createdClans.push(clan)
+            console.log(clan_creator.user_createdClans)
+            clan_creator.user_createdClans.push(clan)
             await clan_creator.save()
             return user_createdClan
         } catch (err) {

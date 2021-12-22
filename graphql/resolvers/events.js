@@ -1,7 +1,9 @@
 const Event = require('../../models/event')
-const User =require('../../models/user')
+const User = require('../../models/user')
 const {Schema} = require("mongoose");
 const {transformEvent} = require('./merge')
+const {errorName} = require("../../errors/errorConstant");
+const {validForm} = require("../../middleware/validForm");
 
 
 module.exports = {
@@ -27,10 +29,10 @@ module.exports = {
      */
     createEvent: async (args, req) => {
         // vérification de l'authentification => si l'utilisateur n'est pas connecté
-        if(!req.isAuth.valid) {
-             throw new Error('Unauthenticated !!!')
+        if (!req.isAuth.valid) {
+            throw new Error(errorName.PERMISSION_ERROR)
         }
-        
+        validForm(args.eventInput)
         const event = new Event({
             event_name: args.eventInput.event_name,
             event_desc: args.eventInput.event_desc,
@@ -46,7 +48,7 @@ module.exports = {
             const creator = await User.findById(req.isAuth.userId)
 
             if (!creator) {
-                throw new Error('User not found !!!')
+                throw new Error(errorName.ERROR_USER)
             }
             creator.user_createdEvent.push(event)
             await creator.save()
@@ -56,15 +58,15 @@ module.exports = {
         }
     },
 
-    //Mutatation suppression d'un event
+
     /**
-     *
+     * suppression d'un event
      * @param args
      * @param req
      * @returns {Promise<*&{createdAt: string, event_date: string, event_creator: *, _id: *, updatedAt: string}>}
      */
-    deleteEvent :async (args,req) => {
-        if(!req.isAuth.valid) {
+    deleteEvent: async (args, req) => {
+        if (!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
 
@@ -81,26 +83,25 @@ module.exports = {
     },
 
     /**
-     *
+     * Mise à jour d'un event
      * @param id
      * @param updateEventInput
      * @param req
      * @returns {Promise<*&{createdAt: string, event_date: string, event_creator: *, _id: *, updatedAt: string}>}
      */
-    updateEvent :async({ id, updateEventInput},req) => {
-        if(!req.isAuth.valid) {
+    updateEvent: async ({id, updateEventInput}, req) => {
+        if (!req.isAuth.valid) {
             throw new Error('Unauthenticated !!!')
         }
-
+        validForm(updateEventInput)
         //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
-        const event = await Event.findById({_id : id})
-
+        const event = await Event.findById({_id: id})
         try {
             //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
-            Event.findOneAndUpdate({ _id: id },
+            Event.findOneAndUpdate({_id: id},
                 updateEventInput,
                 function (err, doc) {
-                    if (err) return res.send(500, { error: err });
+                    if (err) return res.send(500, {error: err});
                 }
             );
 

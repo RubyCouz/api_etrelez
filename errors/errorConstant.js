@@ -17,12 +17,12 @@ exports.errorName = {
     /**
      * form
      */
-    ERROR_MAIL: 'ERROR_MAIL',
+    user_email: 'user_email',
     ERROR_EMPTY_MAIL: 'ERROR_EMPTY_MAIL',
-    ERROR_PASSWORD: 'ERROR_PASSWORD',
+    user_password: 'user_password',
     ERROR_EMPTY_PASSWORD: 'ERROR_EMPTY_PASSWORD',
     ERROR_NOT_EQUAL: 'ERROR_NOT_EQUAL',
-    ERROR_LOGIN: 'ERROR_LOGIN',
+    user_login: 'user_login',
     ERROR_EMPTY_LOGIN: 'ERROR_EMPTY_LOGIN',
     /**
      * DB
@@ -35,7 +35,15 @@ exports.errorName = {
     /**
      * jeux
      */
-    GAME_NOT_EXIST: 'GAME_NOT_EXIST'
+    GAME_NOT_EXIST: 'GAME_NOT_EXIST',
+    game_name: 'game_name',
+    game_desc: 'game_desc',
+    game_pic: 'game_pic',
+    /**
+     * event
+     */
+    event_name: 'event_name',
+    event_desc: 'event_desc'
 }
 exports.errorType = {
     /**
@@ -79,7 +87,7 @@ exports.errorType = {
     /**
      * form
      */
-    ERROR_MAIL: {
+    user_email: {
         message: 'Veuillez saisir une adresse Email valide',
         statusCode: 700
     },
@@ -87,7 +95,7 @@ exports.errorType = {
         message: 'Veuillez remplir ce champ',
         statusCode: 701
     },
-    ERROR_PASSWORD: {
+    user_password: {
         message: 'Veuillez un mot de passe valide',
         statusCode: 702
     },
@@ -99,7 +107,7 @@ exports.errorType = {
         message: 'Les mots de passe ne correspondent pas',
         statusCode: 703
     },
-    ERROR_LOGIN: {
+    user_login: {
         message: 'Veuillez saisir un pseudo conforme',
         statusCode: 703
     },
@@ -129,6 +137,24 @@ exports.errorType = {
      */
     GAME_NOT_EXIST: {
         message: 'Ce jeux n\'est pas encore enregistré'
+    },
+    game_name: {
+        message: 'Certains caractères ne sont pas pris en compte de le titre du jeu'
+    },
+    game_desc: {
+        message: 'Il y a des caractères invalides dans votre description'
+    },
+    game_pic: {
+        message: 'Cette image n\'est pas prise en charge'
+    },
+    /**
+     * event
+     */
+    event_desc: {
+        message: 'Une erreur s\'est glissée dans cette description'
+    },
+    event_name: {
+        message: 'Le nom pour cet event est incorrect'
     }
 }
 
