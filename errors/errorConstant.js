@@ -15,7 +15,7 @@ exports.errorName = {
     NOT_BEFORE: 'NOT_BEFORE',
     WRONG_PASS: 'WRONG_PASS',
     /**
-     * form
+     * user
      */
     user_email: 'user_email',
     ERROR_EMPTY_MAIL: 'ERROR_EMPTY_MAIL',
@@ -24,6 +24,11 @@ exports.errorName = {
     ERROR_NOT_EQUAL: 'ERROR_NOT_EQUAL',
     user_login: 'user_login',
     ERROR_EMPTY_LOGIN: 'ERROR_EMPTY_LOGIN',
+    user_discord: 'user_discord',
+    user_address: 'user_address',
+    user_zip: 'user_zip',
+    user_role: 'user_role',
+    user_state: 'user_state',
     /**
      * DB
      */
@@ -85,7 +90,7 @@ exports.errorType = {
         statusCode: 606
     },
     /**
-     * form
+     * user
      */
     user_email: {
         message: 'Veuillez saisir une adresse Email valide',
@@ -111,8 +116,28 @@ exports.errorType = {
         message: 'Veuillez saisir un pseudo conforme',
         statusCode: 703
     },
-    ERROR_EMPTY_LOGIN: {
-        message: 'Veuillez remplir ce champ',
+    user_discord: {
+        message: 'L\'identifiant discord est incorrect',
+        statusCode: 703
+    },
+    user_address: {
+        message: 'l\'adresse n\'est pas valide',
+        statusCode: 703
+    },
+    user_zip: {
+        message: '^Code postal non valide',
+        statusCode: 703
+    },
+    user_city: {
+        message: 'Cette ville n\'existe pas... Pas cet univers en tout cas',
+        statusCode: 703
+    },
+    user_role: {
+        message: 'N\'essayez pas de créer des rôles sans la permission d\'un administrateur, svp',
+        statusCode: 703
+    },
+    user_state: {
+        message: 'Je ne sais pas quoi dire... A part que cet état n\existe pas par ici',
         statusCode: 703
     },
     /**
