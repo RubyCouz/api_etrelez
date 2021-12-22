@@ -7,7 +7,6 @@ const regex = require('../helpers/regex')
 exports.validForm = (data) => {
     // parcours de l'objet passé en paramêtre
     for (let key in data) {
-
         if (typeof data[key] !== 'boolean') {
             // suppression des espaces superflus
             data[key].trim()

@@ -170,6 +170,7 @@ module.exports = buildSchema(`
             createUser(userInput: UserInput): User
             createdByAdmin(email: String!): User
             confirmUser(token: String!, pass: String!): AuthData!
+            deleteUser(id: ID!): User
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event
             updateEvent(id: ID!,updateEventInput: UpdateEventInput): Event
@@ -187,7 +188,6 @@ module.exports = buildSchema(`
             cancelJoining(engagementId: ID!): Event!
             updateUser(_id: ID!, updateUserInput: UserUpdateInput): User!
             updateGame(_id: ID!, GameInput: GameUpdateInput): Game!
-            
         }
         
         schema {

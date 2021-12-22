@@ -64,4 +64,27 @@ module.exports = {
             throw error;
         }
     },
-};
+    /**
+     * suppression d'un user
+     * @param args
+     * @param req
+     * @returns {Promise<*&{createdAt: string, user_createdEvent: *, user_stream: *, _id: *, user_game_played: *, user_clan: *, updatedAt: string}>}
+     */
+    deleteUser: async (args, req) => {
+        console.log(args.id)
+        if(args.id === req.isAuth.userId) {
+            throw new Error(errorName.PERMISSION_ERROR)
+        }
+        if(!req.isAuth.valid) {
+            throw new Error(errorName.PERMISSION_ERROR)
+        }
+        const user = await User.findById({_id: args.id})
+        try {
+            user.remove()
+            return transformUser(user)
+        } catch (err) {
+            console.log(err)
+            throw err
+        }
+    }
+}

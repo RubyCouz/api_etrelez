@@ -57,8 +57,6 @@ module.exports = {
             throw err
         }
     },
-
-
     /**
      * suppression d'un event
      * @param args
