@@ -45,6 +45,15 @@ module.exports = {
         if (!req.isAuth.valid && !(req.isAuth.userRole === "admin" || req.isAuth.userId === _id)) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
+        if(updateUserInput.user_email === '') {
+            throw new Error(errorName.ERROR_EMPTY_MAIL)
+        }
+        if(updateUserInput.user_login === '') {
+            throw new Error(errorName.ERROR_EMPTY_LOGIN)
+        }
+        if(updateUserInput.user_password === '') {
+            throw new Error(errorName.ERROR_EMPTY_PASSWORD)
+        }
         validForm(updateUserInput)
         try {
             const user = await User.findById(_id);

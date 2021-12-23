@@ -108,6 +108,10 @@ exports.errorType = {
         message: 'Veuillez remplir ce champ',
         statusCode: 703
     },
+    ERROR_EMPTY_LOGIN: {
+        message: 'Veuillez remplir ce champ',
+        statusCode: 703
+    },
     ERROR_NOT_EQUAL: {
         message: 'Les mots de passe ne correspondent pas',
         statusCode: 703
