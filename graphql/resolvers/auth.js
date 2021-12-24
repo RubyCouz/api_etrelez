@@ -199,11 +199,10 @@ module.exports = {
 
     createdByAdmin: async (args) => {
         try {
-            if (!emailRegex.test(args.email)) {
-                throw new Error(errorName.user_email)
-            }
+            validForm(args)
+
             const existingUser = await User.findOne({
-                user_email: args.email
+                user_email: args.user_email
             })
             if (existingUser) {
                 throw new Error(errorName.ERROR_USER)
@@ -211,7 +210,7 @@ module.exports = {
             const hashedPassword = await bcrypt.hash('PasswordByDefault', 12)
                 const user = new User({
                     user_login: 'Anonyme',
-                    user_email: args.email,
+                    user_email: args.user_email,
                     user_password: hashedPassword,
                     user_role: 'membre',
                     user_isActive: false,
@@ -220,10 +219,10 @@ module.exports = {
             // création code secret
             const pass = passConfirmation()
             // création du token de vérification
-            const token = confirmationToken(args.email, pass)
+            const token = confirmationToken(args.user_email, pass)
             // envoie de mail pour confirmation
             await signupMail.signupMail(
-                args.email,
+                args.user_email,
                 pass,
                 token
             )

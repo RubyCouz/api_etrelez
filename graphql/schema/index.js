@@ -42,6 +42,8 @@ module.exports = buildSchema(`
             event_name: String
             event_date: String
             event_desc: String
+            event_score: String
+            event_winner: String
       }
         
         type Clan {
@@ -168,12 +170,12 @@ module.exports = buildSchema(`
         
         type RootMutation {
             createUser(userInput: UserInput): User
-            createdByAdmin(email: String!): User
+            createdByAdmin(user_email: String!): User
             confirmUser(token: String!, pass: String!): AuthData!
             deleteUser(id: ID!): User
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event
-            updateEvent(id: ID!,updateEventInput: UpdateEventInput): Event
+            updateEvent(_id: ID!,updateEventInput: UpdateEventInput): Event
             createGame(gameInput: GameInput): Game
             createStream(streamInput: StreamInput): Stream
             createClan(clanInput: ClanInput): Clan
