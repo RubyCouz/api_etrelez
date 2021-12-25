@@ -144,9 +144,9 @@ module.exports = buildSchema(`
         }
         
         input GameUpdateInput {
-            game_name: String!
-            game_desc: String!
-            game_pic: String!
+            game_name: String
+            game_desc: String
+            game_pic: String
         }
         
         input StreamInput {
@@ -175,7 +175,7 @@ module.exports = buildSchema(`
             deleteUser(id: ID!): User
             createEvent(eventInput: EventInput): Event
             deleteEvent(id: ID!): Event
-            updateEvent(_id: ID!,updateEventInput: UpdateEventInput): Event
+            updateEvent(id: ID!,updateEventInput: UpdateEventInput): Event
             createGame(gameInput: GameInput): Game
             createStream(streamInput: StreamInput): Stream
             createClan(clanInput: ClanInput): Clan
@@ -189,7 +189,8 @@ module.exports = buildSchema(`
             cancelJoinClan(clanId: ID!): Clan!
             cancelJoining(engagementId: ID!): Event!
             updateUser(_id: ID!, updateUserInput: UserUpdateInput): User!
-            updateGame(_id: ID!, GameInput: GameUpdateInput): Game!
+            updateGame(id: ID!, gameUpdateInput: GameUpdateInput): Game
+            deleteGame(id: ID!): Event
         }
         
         schema {

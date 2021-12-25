@@ -65,19 +65,19 @@ module.exports = {
      * @param req
      * @returns {Promise<*&{createdAt: string, _id: *, game_creator: *, updatedAt: string}>}
      */
-    updateGame: async ({_id, GameInput}, req) => {
-        if (!req.isAuth.valid && !(req.isAuth.userRole === "admin" || req.isAuth.userId === _id)) {
+    updateGame: async ({id, gameUpdateInput}, req) => {
+        if (!req.isAuth.valid && !(req.isAuth.userRole === "admin")) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
-        validForm(args.gameInput)
+        validForm(gameUpdateInput)
         try {
-            const game = await Game.findById(_id)
+            const game = await Game.findById({_id: id})
             if (!game) {
                 throw new Error(errorName.GAME_NOT_EXIST)
             } else {
                 Game.findOneAndUpdate(
-                    {_id: _id},
-                    GameInput,
+                    {_id: id},
+                    gameUpdateInput,
                     function (err, doc) {
                         if (err) return res.send(500, {error: err})
                     }
@@ -85,6 +85,20 @@ module.exports = {
             }
             return transformGame(game)
         } catch (e) {
+            throw e
+        }
+    },
+
+    deleteGame: async (args, req) => {
+        if(!req.isAuth.valid) {
+            throw new Error(errorName.PERMISSION_ERROR)
+        }
+        const game = await Game.findById({_id: args.id})
+        try {
+            game.remove()
+            return transformGame(game)
+        } catch (e) {
+            console.log(e)
             throw e
         }
     }

@@ -32,6 +32,7 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
+        console.log(args.eventInput)
         validForm(args.eventInput)
         const event = new Event({
             event_name: args.eventInput.event_name,
@@ -65,7 +66,7 @@ module.exports = {
      */
     deleteEvent: async (args, req) => {
         if (!req.isAuth.valid) {
-            throw new Error('Unauthenticated !!!')
+            throw new Error(errorName.PERMISSION_ERROR)
         }
 
         //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
@@ -110,5 +111,4 @@ module.exports = {
             throw err
         }
     },
-
 }

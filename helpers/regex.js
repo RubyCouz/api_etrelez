@@ -17,6 +17,8 @@ exports.user_state = new RegExp('^[a-zA-Zàâäéèëêùûüìîïòôöçãñ�
 exports.event_name = new RegExp('^[^<>]+$')
 exports.event_desc = new RegExp('^[^<>]+$')
 exports.event_date = new RegExp('^[^<>]+$')
+exports.event_score = new RegExp('^[^<>]+$')
+exports.event_winner = new RegExp('^[^<>]+$')
 /**
  * token
  * @type {RegExp}
