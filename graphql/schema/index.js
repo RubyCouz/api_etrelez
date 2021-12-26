@@ -12,6 +12,7 @@ module.exports = buildSchema(`
             user_city: String
             user_gender: String
             user_role: String!
+            user_avatar: String
             user_state: String 
             user_createdEvent: [Event!] 
             user_createdClans: [Clan!]
