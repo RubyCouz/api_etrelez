@@ -31,3 +31,16 @@ exports.tokenRegex = new RegExp('^[\w]{6}$')
 exports.game_name = new RegExp('^[^<>]+$')
 exports.game_pic = new RegExp('^[^<>]+$')
 exports.game_desc = new RegExp('^[^<>]+$')
+
+/**
+ * clan
+ * @type {RegExp}
+ */
+exports.clan_name = new RegExp('^[^<>]+$')
+exports.clan_desc = new RegExp('^[^<>]+$')
+exports.clan_banner = new RegExp('^[^<>]+$')
+exports.clan_discord = new RegExp('^[^<>]+$')
+exports.clan_population = new RegExp('^[^<>]+$')
+exports.clan_activity = new RegExp('^[^<>]+$')
+exports.clan_recrut = new RegExp('^[^<>]+$')
+

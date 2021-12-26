@@ -1,6 +1,5 @@
 const Event = require('../../models/event')
 const User = require('../../models/user')
-const {Schema} = require("mongoose");
 const {transformEvent} = require('./merge')
 const {errorName} = require("../../errors/errorConstant");
 const {validForm} = require("../../middleware/validForm");
@@ -102,8 +101,7 @@ module.exports = {
                 function (err, doc) {
                     if (err) return res.send(500, {error: err});
                 }
-            );
-
+            )
             //retourne l'event par l'id
             return transformEvent(event)
         } catch (err) {

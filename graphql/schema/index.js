@@ -137,6 +137,15 @@ module.exports = buildSchema(`
             clan_activity: String!
         }
         
+        input UpdateClanInput {
+            clan_name: String
+            clan_desc: String
+            clan_banner: String
+            clan_discord: String
+            clan_population: String
+            clan_recrut: String
+            clan_activity: String
+        }
         input GameInput {
             game_name: String!
             game_desc: String!
@@ -191,6 +200,8 @@ module.exports = buildSchema(`
             updateUser(_id: ID!, updateUserInput: UserUpdateInput): User!
             updateGame(id: ID!, gameUpdateInput: GameUpdateInput): Game
             deleteGame(id: ID!): Event
+            updateClan(id: ID!, updateClanInput: UpdateClanInput): Clan!
+            deleteClan(id: ID!): Clan
         }
         
         schema {
