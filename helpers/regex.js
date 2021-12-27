@@ -11,6 +11,7 @@ exports.user_zip = new RegExp('^[\\d]{5}$')
 exports.user_city = new RegExp('^[\\wàâäéèëêùûüìîïòôöçãñõ\\-\\s]+$')
 exports.user_role = new RegExp('^admin|membre$')
 exports.user_state = new RegExp('^[a-zA-Zàâäéèëêùûüìîïòôöçãñõ\\s\\-]+$')
+exports.user_avatar = new RegExp('^[^<>]+$')
 /**
  * event
  */

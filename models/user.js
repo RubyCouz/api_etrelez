@@ -12,6 +12,7 @@ const unRequiredString = {
 }
 
 const userSchema = new Schema({
+        user_avatar: unRequiredString,
         user_login: requiredString,
         user_email: requiredString,
         user_password: requiredString,

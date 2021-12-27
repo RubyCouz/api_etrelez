@@ -110,6 +110,7 @@ module.exports = buildSchema(`
         input UserUpdateInput {
             user_login: String
             user_email: String
+            user_avatar: String
             user_password: String
             user_discord: String
             user_address: String

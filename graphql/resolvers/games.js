@@ -31,6 +31,7 @@ module.exports = {
         }
         // vérification des données saisie
         validForm(args.gameInput)
+
         // instanciation d'un nouvel objet game
         const game = new Game({
             game_name: args.gameInput.game_name,
@@ -42,6 +43,24 @@ module.exports = {
         try {
             // envoie des données dans la base
             const result = await game.save()
+            let picName
+            if (args.gameInput.game_pic !== '') {
+                const file = args.gameInput.game_pic.split('.')
+                const ext = file.pop()
+                picName = result._id + '_game.' + ext
+            }
+
+            const gameUpdateInput = {game_pic: picName}
+            // enregistrement du fichier après renommage
+            Game.findOneAndUpdate({
+                    _id: game._id,
+                },
+                gameUpdateInput,
+                function (err, doc) {
+                    console.log(err)
+                    if (err) return res.send(500, {error: err});
+                }
+            )
             createdGame = transformGame(result)
             // recherche du user qui fait la création
             const game_creator = await User.findById(req.isAuth.userId)
@@ -75,6 +94,11 @@ module.exports = {
             if (!game) {
                 throw new Error(errorName.GAME_NOT_EXIST)
             } else {
+                if (gameUpdateInput.game_pic !== '') {
+                    const file = gameUpdateInput.game_pic.split('.')
+                    const ext = file.pop()
+                    gameUpdateInput.game_pic = id + '_game.' + ext
+                }
                 Game.findOneAndUpdate(
                     {_id: id},
                     gameUpdateInput,
@@ -90,7 +114,7 @@ module.exports = {
     },
 
     deleteGame: async (args, req) => {
-        if(!req.isAuth.valid) {
+        if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
         const game = await Game.findById({_id: args.id})

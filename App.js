@@ -38,9 +38,9 @@ app.use('/api', graphqlHTTP({
 }
 }))
 
-app.post('/upload/game', upload)
-app.post('/upload/event', upload)
-app.post('/upload/profilePic', upload)
+app.post('/upload/game/:id', upload)
+app.post('/upload/event/:id', upload)
+app.post('/upload/profilePic/:id', upload)
 mongoose.connect(`mongodb://localhost:27017/EterelZ?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

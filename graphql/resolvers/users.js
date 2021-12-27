@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs')
 const {transformUser} = require("./merge");
 const {errorName} = require("../../errors/errorConstant");
 const {validForm} = require("../../middleware/validForm");
+const fs = require("fs");
 
 module.exports = {
     /**
@@ -45,13 +46,13 @@ module.exports = {
         if (!req.isAuth.valid && !(req.isAuth.userRole === "admin" || req.isAuth.userId === _id)) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
-        if(updateUserInput.user_email === '') {
+        if (updateUserInput.user_email === '') {
             throw new Error(errorName.ERROR_EMPTY_MAIL)
         }
-        if(updateUserInput.user_login === '') {
+        if (updateUserInput.user_login === '') {
             throw new Error(errorName.ERROR_EMPTY_LOGIN)
         }
-        if(updateUserInput.user_password === '') {
+        if (updateUserInput.user_password === '') {
             throw new Error(errorName.ERROR_EMPTY_PASSWORD)
         }
         validForm(updateUserInput)
@@ -60,10 +61,16 @@ module.exports = {
             if (!user) {
                 throw new Error(errorName.ERROR_USER);
             } else {
+                if(updateUserInput.user_avatar !== '') {
+                    const file = updateUserInput.user_avatar.split('.')
+                    const ext = file.pop()
+                    updateUserInput.user_avatar = _id + '_avatar.' + ext
+                }
                 User.findOneAndUpdate(
                     {_id: _id},
                     updateUserInput,
                     function (err, doc) {
+                        console.log(err)
                         if (err) return res.send(500, {error: err});
                     }
                 );
@@ -81,10 +88,10 @@ module.exports = {
      */
     deleteUser: async (args, req) => {
         console.log(args.id)
-        if(args.id === req.isAuth.userId) {
+        if (args.id === req.isAuth.userId) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
-        if(!req.isAuth.valid) {
+        if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
         const user = await User.findById({_id: args.id})
