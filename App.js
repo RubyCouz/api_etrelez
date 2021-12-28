@@ -38,6 +38,7 @@ app.use('/api', graphqlHTTP({
 }
 }))
 
+app.post('/upload/clan/:id', upload)
 app.post('/upload/game/:id', upload)
 app.post('/upload/event/:id', upload)
 app.post('/upload/profilePic/:id', upload)

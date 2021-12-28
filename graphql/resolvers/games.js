@@ -80,7 +80,6 @@ module.exports = {
     /**
      * Modification des informations d'un jeu
      * @param _id
-     * @param updateGameInput
      * @param req
      * @returns {Promise<*&{createdAt: string, _id: *, game_creator: *, updatedAt: string}>}
      */
@@ -94,7 +93,7 @@ module.exports = {
             if (!game) {
                 throw new Error(errorName.GAME_NOT_EXIST)
             } else {
-                if (gameUpdateInput.game_pic !== '') {
+                if (gameUpdateInput.game_pic !== '' && gameUpdateInput.game_pic !== undefined) {
                     const file = gameUpdateInput.game_pic.split('.')
                     const ext = file.pop()
                     gameUpdateInput.game_pic = id + '_game.' + ext
@@ -112,7 +111,12 @@ module.exports = {
             throw e
         }
     },
-
+    /**
+     * suppresion d'un jeu
+     * @param args
+     * @param req
+     * @returns {Promise<*&{createdAt: string, _id: *, game_creator: *, updatedAt: string}>}
+     */
     deleteGame: async (args, req) => {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)

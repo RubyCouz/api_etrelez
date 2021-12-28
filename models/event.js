@@ -16,6 +16,7 @@ const requiredDate = {
 }
 
 const eventSchema = new Schema({
+        event_pic: unRequiredString,
         event_name: requiredString,
         event_date: requiredDate,
         event_desc: requiredString,
@@ -31,7 +32,6 @@ const eventSchema = new Schema({
         }],
     },
     {timestamps: true}
-
 )
 
 module.exports = mongoose.model('Event', eventSchema)

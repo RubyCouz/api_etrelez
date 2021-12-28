@@ -29,6 +29,7 @@ module.exports = buildSchema(`
         
         type Event {
             _id: ID!
+            event_pic: String
             event_name: String!
             event_date: String!
             event_desc: String!
@@ -40,6 +41,7 @@ module.exports = buildSchema(`
         }
         
       input UpdateEventInput{
+            event_pic: String
             event_name: String
             event_date: String
             event_desc: String
@@ -124,6 +126,7 @@ module.exports = buildSchema(`
         }
             
         input EventInput {
+            event_pic: String
             event_name: String!
             event_date: String!
             event_desc: String!

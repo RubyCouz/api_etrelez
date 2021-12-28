@@ -61,7 +61,7 @@ module.exports = {
             if (!user) {
                 throw new Error(errorName.ERROR_USER);
             } else {
-                if(updateUserInput.user_avatar !== '') {
+                if(updateUserInput.user_avatar !== '' && updateUserInput.user_avatar !== undefined) {
                     const file = updateUserInput.user_avatar.split('.')
                     const ext = file.pop()
                     updateUserInput.user_avatar = _id + '_avatar.' + ext

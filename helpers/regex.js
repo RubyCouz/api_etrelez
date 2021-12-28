@@ -15,6 +15,7 @@ exports.user_avatar = new RegExp('^[^<>]+$')
 /**
  * event
  */
+exports.event_pic = new RegExp('^[^<>]+$')
 exports.event_name = new RegExp('^[^<>]+$')
 exports.event_desc = new RegExp('^[^<>]+$')
 exports.event_date = new RegExp('^[^<>]+$')

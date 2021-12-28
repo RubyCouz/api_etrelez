@@ -5,6 +5,7 @@ const Game = require('../../models/game')
 const {transformClan} = require('./merge')
 const {errorName} = require("../../errors/errorConstant");
 const {validForm} = require("../../middleware/validForm");
+const {log} = require("nodemon/lib/utils");
 
 module.exports = {
     /**
@@ -31,6 +32,7 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
+        validForm(args.clanInput)
         const clan = new Clan({
             clan_name: args.clanInput.clan_name,
             clan_desc: args.clanInput.clan_desc,
@@ -45,12 +47,29 @@ module.exports = {
 
         try {
             const result = await clan.save()
+            let picName
+            if (args.clanInput.clan_banner !== '') {
+                const file = args.clanInput.clan_banner.split('.')
+                const ext = file.pop()
+                picName = result._id + '_clan.' + ext
+            }
+
+            const updateClanInput = {clan_banner: picName}
+            // enregistrement du fichier après renommage
+            Clan.findOneAndUpdate({
+                    _id: clan._id,
+                },
+                updateClanInput,
+                function (err, doc) {
+                    console.log(err)
+                    if (err) return res.send(500, {error: err});
+                }
+            )
             user_createdClan = transformClan(result)
             const clan_creator = await User.findById(req.isAuth.userId)
             if (!clan_creator) {
                 throw new Error('Utilisateur introuvable !!!')
             }
-            console.log(clan_creator.user_createdClans)
             clan_creator.user_createdClans.push(clan)
             await clan_creator.save()
             return user_createdClan
@@ -88,16 +107,26 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
-        console.log(updateClanInput)
         validForm(updateClanInput)
-        const clan = await Clan.findById({_id: id})
         try {
-            Clan.findOneAndUpdate({_id: id},
-                updateClanInput,
-                function (err, _doc) {
-                    if (err) return res.send(500, {error: err})
+            const clan = await Clan.findById({_id: id})
+            if (!clan) {
+                throw new Error(errorName.CLAN_NOT_EXIST)
+            } else {
+                if (updateClanInput.clan_banner !== '' && updateClanInput.clan_banner !== undefined) {
+                    const file = updateClanInput.clan_banner.split('.')
+                    const ext = file.pop()
+                    updateClanInput.clan_banner = id + '_clan.' + ext
                 }
-            )
+                Clan.findOneAndUpdate(
+                    {_id: id},
+                    updateClanInput,
+                    function (err, doc) {
+                        if (err) return res.send(500, {error: err})
+                    }
+                )
+            }
+
             return transformClan(clan)
         } catch (e) {
             console.log(e)

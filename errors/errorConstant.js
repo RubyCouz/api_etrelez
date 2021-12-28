@@ -1,4 +1,5 @@
 // expiration du token
+const {clan_activity} = require("../helpers/regex");
 exports.errorName = {
     /**
      * erreur de permission
@@ -47,8 +48,21 @@ exports.errorName = {
     /**
      * event
      */
+    EVENT_NOT_EXIST: 'EVENT_NOT_EXIST',
     event_name: 'event_name',
-    event_desc: 'event_desc'
+    event_desc: 'event_desc',
+    event_pic: 'event_pic',
+    /**
+     * clan
+     */
+    CLAN_NOT_EXIST: 'CLAN_NOT_EXIST',
+    clan_banner: 'clan_banner',
+    clan_name: 'clan_name',
+    clan_desc: 'clan_desc',
+    clan_population: 'clan_population',
+    clan_recrut: 'clan_recrut',
+    clan_activity: 'clan_activity',
+    clan_discord: 'clan_discord'
 }
 exports.errorType = {
     /**
@@ -184,7 +198,41 @@ exports.errorType = {
     },
     event_name: {
         message: 'Le nom pour cet event est incorrect'
-    }
+    },
+    event_pic: {
+        message: 'Cette image n\'est pas prise en charge'
+    },
+    EVENT_NOT_EXIST: {
+        message: 'Cet évènement n\'est pas encore enregistré'
+    },
+    /**
+     * clan
+     */
+
+    CLAN_NOT_EXIST: {
+        message: 'Cet évènement n\'est pas encore enregistré'
+    },
+    clan_banner: {
+        message: 'Cette image n\'est pas prise en charge'
+    },
+    clan_name: {
+        message: 'Nom de clan / team non valide'
+    },
+    clan_discord: {
+        message: 'ce serveur discord n\'est pas pris en charge'
+    },
+    clan_population: {
+        message: 'Euh... c\'est quoi ce chiffre ??'
+    },
+    clan_recrut: {
+        message: 'Nah, j\'ai pas compris...'
+    },
+    clan_activity: {
+        message: 'C\'est possible une telle activité ???'
+    },
+    cla_desc: {
+        message: 'Wahou !! Quelle description !! Mais je ne peux pas la prendre en charge...'
+    },
 }
 
 

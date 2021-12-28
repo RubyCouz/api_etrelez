@@ -31,19 +31,33 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
-        console.log(args.eventInput)
         validForm(args.eventInput)
         const event = new Event({
+            event_pic: args.eventInput.event_pic,
             event_name: args.eventInput.event_name,
             event_desc: args.eventInput.event_desc,
             event_date: new Date(args.eventInput.event_date),
             event_creator: req.isAuth.userId
         })
         let createdEvent
-
         try {
-            const result = await event
-                .save()
+            const result = await event.save()
+            let picName
+            if (args.eventInput.event_pic !== '') {
+                const file = args.eventInput.event_pic.split('.')
+                const ext = file.pop()
+                picName = result._id + '_event.' + ext
+            }
+            const updateEventInput = {event_pic: picName}
+            Event.findOneAndUpdate({
+                    _id: event._id,
+                },
+                updateEventInput,
+                function (err, doc) {
+                    console.log(err)
+                    if (err) return res.send(500, {error: err})
+                }
+            )
             createdEvent = transformEvent(result)
             const creator = await User.findById(req.isAuth.userId)
 
@@ -70,7 +84,9 @@ module.exports = {
 
         //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
         const event = await Event.findById({_id: args.id})
-
+        if(!event) {
+            throw new Error(errorName.EVENT_NOT_EXIST)
+        }
         try {
             event.remove()
             return transformEvent(event)
@@ -92,9 +108,19 @@ module.exports = {
             throw new Error('Unauthenticated !!!')
         }
         validForm(updateEventInput)
-        //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
-        const event = await Event.findById({_id: id})
         try {
+            //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
+            const event = await Event.findById({_id: id})
+            if(!event) {
+                throw new Error(errorName.EVENT_NOT_EXIST)
+            } else {
+                console.log(updateEventInput.event_pic)
+                if(updateEventInput.event_pic !== '' && updateEventInput.event_pic !== undefined) {
+                    const file = updateEventInput.event_pic.split('.')
+                    const ext = file.pop()
+                    updateEventInput.event_pic = id + '_event.' + ext
+                }
+            }
             //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)
             Event.findOneAndUpdate({_id: id},
                 updateEventInput,
@@ -105,7 +131,6 @@ module.exports = {
             //retourne l'event par l'id
             return transformEvent(event)
         } catch (err) {
-            console.log(err)
             throw err
         }
     },
