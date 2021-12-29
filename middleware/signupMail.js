@@ -3,8 +3,6 @@ const config = require('../config.json')
 
 module.exports = {
     signupMail: async (email, pass, token) => {
-        console.log(token)
-        console.log(pass)
         const output = `
                 <h1>Bienvenue sur Eterelz</h1>
                 Vous avez été invité à la communauté EterelZ par un administrateur !!

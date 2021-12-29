@@ -57,7 +57,6 @@ module.exports = {
                 },
                 gameUpdateInput,
                 function (err, doc) {
-                    console.log(err)
                     if (err) return res.send(500, {error: err});
                 }
             )
@@ -126,7 +125,6 @@ module.exports = {
             game.remove()
             return transformGame(game)
         } catch (e) {
-            console.log(e)
             throw e
         }
     }

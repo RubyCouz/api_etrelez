@@ -17,7 +17,6 @@ module.exports = function upload(req, res, next) {
     // récupération de l'url et stockage dans un tableau
     const urlToArray = req.url.split('/')
     const id = urlToArray[3]
-    console.log(id)
     const idRegex = new RegExp('^[\\w]{24}$')
     if(!idRegex.test(id)) {
         throw new Error(errorName.PERMISSION_ERROR)
@@ -103,7 +102,6 @@ module.exports = function upload(req, res, next) {
                     })
                 }
                 const finalName = id + prefix + ext
-                console.log(finalName)
                 try {
                     fs.renameSync(file.path, uploadFolder + '/' + finalName)
                     return res.status(200).json({

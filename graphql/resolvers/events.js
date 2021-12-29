@@ -31,7 +31,6 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
-        console.log(args.eventInput)
         validForm(args.eventInput)
         const event = new Event({
             event_pic: args.eventInput.event_pic,
@@ -57,7 +56,6 @@ module.exports = {
                 },
                 updateEventInput,
                 function (err, doc) {
-                    console.log(err)
                     if (err) return res.send(500, {error: err})
                 }
             )
@@ -94,7 +92,6 @@ module.exports = {
             event.remove()
             return transformEvent(event)
         } catch (err) {
-            console.log(err)
             throw err
         }
     },
@@ -117,7 +114,6 @@ module.exports = {
             if(!event) {
                 throw new Error(errorName.EVENT_NOT_EXIST)
             } else {
-                console.log(updateEventInput.event_pic)
                 if(updateEventInput.event_pic !== '' && updateEventInput.event_pic !== undefined) {
                     const file = updateEventInput.event_pic.split('.')
                     const ext = file.pop()

@@ -70,7 +70,6 @@ module.exports = {
                     {_id: _id},
                     updateUserInput,
                     function (err, doc) {
-                        console.log(err)
                         if (err) return res.send(500, {error: err});
                     }
                 );
@@ -87,7 +86,6 @@ module.exports = {
      * @returns {Promise<*&{createdAt: string, user_createdEvent: *, user_stream: *, _id: *, user_game_played: *, user_clan: *, updatedAt: string}>}
      */
     deleteUser: async (args, req) => {
-        console.log(args.id)
         if (args.id === req.isAuth.userId) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
@@ -99,7 +97,6 @@ module.exports = {
             user.remove()
             return transformUser(user)
         } catch (err) {
-            console.log(err)
             throw err
         }
     }
