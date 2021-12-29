@@ -31,7 +31,9 @@ module.exports = buildSchema(`
             _id: ID!
             event_pic: String
             event_name: String!
-            event_date: String!
+            event_start: String!
+            event_end: String!
+            event_allDay: Boolean!
             event_desc: String!
             event_score: String
             event_winner: String
@@ -43,8 +45,10 @@ module.exports = buildSchema(`
       input UpdateEventInput{
             event_pic: String
             event_name: String
-            event_date: String
             event_desc: String
+            event_start: String
+            event_end: String
+            event_allDay: Boolean
             event_score: String
             event_winner: String
       }
@@ -128,7 +132,9 @@ module.exports = buildSchema(`
         input EventInput {
             event_pic: String
             event_name: String!
-            event_date: String!
+            event_start: String!
+            event_end: String!
+            event_allDay: Boolean!
             event_desc: String!
         } 
         

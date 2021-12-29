@@ -31,12 +31,15 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
+        console.log(args.eventInput)
         validForm(args.eventInput)
         const event = new Event({
             event_pic: args.eventInput.event_pic,
             event_name: args.eventInput.event_name,
             event_desc: args.eventInput.event_desc,
-            event_date: new Date(args.eventInput.event_date),
+            event_start: new Date(args.eventInput.event_start),
+            event_end: new Date(args.eventInput.event_end),
+            event_allDay: args.eventInput.event_allDay,
             event_creator: req.isAuth.userId
         })
         let createdEvent

@@ -18,7 +18,11 @@ const requiredDate = {
 const eventSchema = new Schema({
         event_pic: unRequiredString,
         event_name: requiredString,
-        event_date: requiredDate,
+        event_start: requiredDate,
+        event_end: requiredDate,
+        event_allDay: {
+            type: Boolean
+        },
         event_desc: requiredString,
         event_score: unRequiredString,
         event_winner: unRequiredString,
