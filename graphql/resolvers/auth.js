@@ -48,6 +48,7 @@ module.exports = {
                 user_login: args.userInput.user_login,
                 user_email: args.userInput.user_email,
                 user_password: hashedPassword,
+                user_avatar: 'default.gif',
                 user_role: 'membre',
                 user_isActive: false,
             })
@@ -175,6 +176,7 @@ module.exports = {
         if (!user) {
             throw new Error(errorName.ERROR_USER)
         }
+        console.log(user.user_isActive)
         if (!user.user_isActive) {
             throw new Error(errorName.ISACTIVE)
         }
