@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/Public'))
 
 app.use(cookieParser())
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'https://rubycouz.xyz')
+    res.setHeader('Access-Control-Allow-Origin', '*')
     res.setHeader('Access-Control-Allow-Credentials', true)
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
