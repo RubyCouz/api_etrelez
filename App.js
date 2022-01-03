@@ -9,7 +9,6 @@ const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
 const getErrorCode = require('./errors/errors')
 const app = express()
-
 app.use(express.static(__dirname + '/Public'))
 
 app.use(cookieParser())
@@ -42,7 +41,7 @@ app.post('/upload/clan/:id', upload)
 app.post('/upload/game/:id', upload)
 app.post('/upload/event/:id', upload)
 app.post('/upload/profilePic/:id', upload)
-mongoose.connect(`mongodb://localhost:27017/EterelZ?readPreference=primary&appname=MongoDB%20Compass&directConnection=true&ssl=false`, {
+mongoose.connect(`mongodb+srv://RubyCouz:RubyCouz2805@eterelz.2zwgz.mongodb.net/Eterelz?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
