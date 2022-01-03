@@ -15,6 +15,7 @@ app.use(cookieParser())
 app.use((req, res, next) => {
     const allowedOrigins = ['https://rubycouz.xyz', 'http://localhost:3000']
     const origin = req.headers.origin
+    console.log(origin)
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     }
@@ -51,7 +52,7 @@ mongoose.connect(`mongodb+srv://RubyCouz:RubyCouz2805@eterelz.2zwgz.mongodb.net/
     useFindAndModify: false
 })
     .then(() => {
-            app.listen(8080)
+            app.listen(5000)
         }
     )
     .catch(err => {
