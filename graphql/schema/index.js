@@ -57,11 +57,11 @@ module.exports = buildSchema(`
             _id: ID!
             clan_name: String!
             clan_desc: String!
-            clan_banner: String!
-            clan_discord: String!
+            clan_banner: String
+            clan_discord: String
             clan_population: Int!
-            clan_recrut: String!
-            clan_activity: String!
+            clan_recrut: String
+            clan_activity: String
             clan_creator: User!
             createdAt: String!
             updatedAt: String!
