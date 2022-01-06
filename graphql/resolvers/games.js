@@ -45,7 +45,7 @@ module.exports = {
             const result = await game.save()
             let picName
             if (args.gameInput.game_pic === ''|| args.gameInput.game_pic === null) {
-                args.gameInput.game_pic = 'default.gif'
+                picName = 'default.gif'
             } else {
                 const file = args.gameInput.game_pic.split('.')
                 const ext = file.pop()
