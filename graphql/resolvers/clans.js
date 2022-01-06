@@ -32,7 +32,9 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
+
         validForm(args.clanInput)
+
         const clan = new Clan({
             clan_name: args.clanInput.clan_name,
             clan_desc: args.clanInput.clan_desc,
@@ -52,8 +54,6 @@ module.exports = {
                 const file = args.clanInput.clan_banner.split('.')
                 const ext = file.pop()
                 picName = result._id + '_clan.' + ext
-            } else {
-                args.clanInput.clan_banner = 'default.gif'
             }
 
             const updateClanInput = {clan_banner: picName}
