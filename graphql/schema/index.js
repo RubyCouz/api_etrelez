@@ -141,11 +141,11 @@ module.exports = buildSchema(`
         input ClanInput {
             clan_name: String!
             clan_desc: String!
-            clan_banner: String!
-            clan_discord: String!
+            clan_banner: String
+            clan_discord: String
             clan_population: String!
-            clan_recrut: String!
-            clan_activity: String!
+            clan_recrut: String
+            clan_activity: String
         }
         
         input UpdateClanInput {

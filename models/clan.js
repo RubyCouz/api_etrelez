@@ -14,7 +14,7 @@ const unRequiredString = {
 const clanSchema = new Schema({
         clan_name: requiredString,
         clan_desc: requiredString,
-        clan_banner: requiredString,
+        clan_banner: unRequiredString,
         clan_discord: unRequiredString,
         clan_population: {
             type: Number,
