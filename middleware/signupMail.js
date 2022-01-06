@@ -8,11 +8,13 @@ module.exports = {
                 Vous avez été invité à la communauté EterelZ par un administrateur !!
                 <p>
                 Pour compléter vos informations de connexion et votre profil, rendez-vous
-                à cette adresse (<a href="http://localhost:3000/signup/${token}" title="Validation de l'inscription">http://localhost:3000/signup/${token}</a>),
+<!--                 à cette adresse (<a href="http://localhost:3000/signup/${token}" title="Validation de l'inscription">http://localhost:3000/signup/${token}</a>),-->
+                à cette adresse (<a href="https://rubycouz.cc/signup/${token}" title="Validation de l'inscription">https://rubycouz.cc/signup/${token}</a>),
                 ou cliquez sur le bouton ci-dessous.
-                
                 </p>
-                <a href="http://localhost:3000/signup/${token}" title="Validation de l'inscription">
+                <a href="https://rubycouz.cc/signup/${token}" title="Validation de l'inscription">
+
+<!--                <a href="https://localhost:3000/signup/${token}" title="Validation de l'inscription">-->
                     Compléter votre inscription
                 </a>
             `

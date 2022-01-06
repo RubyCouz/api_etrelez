@@ -8,12 +8,13 @@ const isAuth = require('./middleware/is-auth')
 const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
 const getErrorCode = require('./errors/errors')
+// const ssl = require('./.well-known/pki-validation/4A9FF1CEBA9BCFDA15B0762012FE5D58.txt')
 const app = express()
 app.use(express.static(__dirname + '/Public'))
 
 app.use(cookieParser())
 app.use((req, res, next) => {
-    const allowedOrigins = ['https://rubycouz.xyz', 'http://localhost:3000']
+    const allowedOrigins = ['https://rubycouz.cc', 'http://localhost:3000']
     const origin = req.headers.origin
     console.log(origin)
     if (allowedOrigins.includes(origin)) {
@@ -21,11 +22,10 @@ app.use((req, res, next) => {
     }
     res.setHeader('Access-Control-Allow-Credentials', true)
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS')
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-Width, Content-Type, Accept')
     if (req.method === 'OPTIONS') {
         return res.sendStatus(200)
     }
-
     next()
 })
 
@@ -37,9 +37,9 @@ app.use('/api', graphqlHTTP({
     graphiql: true,
     customFormatErrorFn: (err) => {
         console.log('err : ' + err)
-    const error = getErrorCode(err.message)
-    return ({ message: error.message, statusCode: error.statusCode })
-}
+        const error = getErrorCode(err.message)
+        return ({message: error.message, statusCode: error.statusCode})
+    }
 }))
 
 app.post('/upload/clan/:id', upload)

@@ -7,11 +7,13 @@ module.exports = {
                 <h1>Bienvenue sur Eterelz, ${login}</h1>
                 <p>
                 Saisissez le code suivante pour valider votre compte à cette adresse
-                <a href="http://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">
+<!--                <a href="https://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">-->
+                <a href="https://rubycouz.cc/verifyAccount/${token}" title="Validation de l'inscription">
                 http://localhost:3000/verifyAccount/${token}
                 </a>
                 </p>
-                <a href="http://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">
+<!--                <a href="http://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">-->
+                     <a href="https://rubycouz.cc/verifyAccount/${token}" title="Validation de l'inscription">
                     Valider votre compte
                 </a>
                 <p>Votre code : <span style="font-size:24px">${pass}</span></p>
