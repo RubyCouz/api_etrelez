@@ -9,7 +9,7 @@ module.exports = {
                 Saisissez le code suivante pour valider votre compte à cette adresse
 <!--                <a href="https://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">-->
                 <a href="https://rubycouz.cc/verifyAccount/${token}" title="Validation de l'inscription">
-                http://localhost:3000/verifyAccount/${token}
+                https://rubycouz.cc/verifyAccount/${token}
                 </a>
                 </p>
 <!--                <a href="http://localhost:3000/verifyAccount/${token}" title="Validation de l'inscription">-->
