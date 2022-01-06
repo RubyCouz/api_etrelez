@@ -22,5 +22,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm install
-      - run: mv /root/actions-runner/api/api_etrelez /root/actions-runner/api/api
+      - run: mv /root/actions-runner/api/api_etrelez/* /root/actions-runner/api/api
       - run: cp -r /root/actions-runner/api/api /var/www/rubycouz.cc
