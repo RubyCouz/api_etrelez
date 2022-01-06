@@ -70,7 +70,7 @@ module.exports = {
             user_createdClan = transformClan(result)
             const clan_creator = await User.findById(req.isAuth.userId)
             if (!clan_creator) {
-                throw new Error('Utilisateur introuvable !!!')
+                throw new Error(errorName.PERMISSION_ERROR)
             }
             clan_creator.user_createdClans.push(clan)
             await clan_creator.save()
