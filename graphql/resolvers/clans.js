@@ -52,6 +52,8 @@ module.exports = {
                 const file = args.clanInput.clan_banner.split('.')
                 const ext = file.pop()
                 picName = result._id + '_clan.' + ext
+            } else {
+                args.clanInput.clan_banner = 'default.gif'
             }
 
             const updateClanInput = {clan_banner: picName}

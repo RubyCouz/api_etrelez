@@ -48,6 +48,8 @@ module.exports = {
                 const file = args.gameInput.game_pic.split('.')
                 const ext = file.pop()
                 picName = result._id + '_game.' + ext
+            } else {
+                args.gameInput.game_pic = 'default.gif'
             }
 
             const gameUpdateInput = {game_pic: picName}

@@ -49,6 +49,8 @@ module.exports = {
                 const file = args.eventInput.event_pic.split('.')
                 const ext = file.pop()
                 picName = result._id + '_event.' + ext
+            } else {
+                args.eventInput.event_pic = 'default.gif'
             }
             const updateEventInput = {event_pic: picName}
             Event.findOneAndUpdate({
