@@ -44,12 +44,13 @@ module.exports = {
             // envoie des données dans la base
             const result = await game.save()
             let picName
-            if (args.gameInput.game_pic !== '' && args.gameInput.game_pic !== null) {
+            if (args.gameInput.game_pic === ''|| args.gameInput.game_pic === null) {
+                args.gameInput.game_pic = 'default.gif'
+            } else {
                 const file = args.gameInput.game_pic.split('.')
                 const ext = file.pop()
                 picName = result._id + '_game.' + ext
-            } else {
-                args.gameInput.game_pic = 'default.gif'
+
             }
 
             const gameUpdateInput = {game_pic: picName}
