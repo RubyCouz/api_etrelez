@@ -22,3 +22,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm install
+      - run: rm -rf /var/www/rubycouz.cc/api
+      - run: cp -r /root/actions-runner/api/api_eterelz /var/www/rubycouz.cc/api
+      - run: pm2 restart Api
