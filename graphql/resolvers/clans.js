@@ -1,11 +1,10 @@
 const User = require('../../models/user')
 const Clan = require('../../models/clan')
-const Game = require('../../models/game')
+// const Game = require('../../models/game')
 
 const {transformClan} = require('./merge')
 const {errorName} = require("../../errors/errorConstant");
 const {validForm} = require("../../middleware/validForm");
-const {log} = require("nodemon/lib/utils");
 
 module.exports = {
     /**
