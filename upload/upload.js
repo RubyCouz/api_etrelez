@@ -18,7 +18,7 @@ module.exports = function upload(req, res, next) {
     const urlToArray = req.url.split('/')
     const id = urlToArray[3]
     const idRegex = new RegExp('^[\\w]{24}$')
-    if(!idRegex.test(id)) {
+    if (!idRegex.test(id)) {
         throw new Error(errorName.PERMISSION_ERROR)
     }
     let folder = ''
@@ -57,7 +57,9 @@ module.exports = function upload(req, res, next) {
     form.uploadDir = uploadFolder
 
     form.parse(req, async (err, fields, files) => {
-
+        console.log(err)
+        console.log(fields)
+        console.log(files)
 
         // if (err) {
         //     console.log(err)
@@ -87,7 +89,7 @@ module.exports = function upload(req, res, next) {
                 const ext = fileInArray.pop()
                 // regex pour la vérification du nom de fichier
                 const fileRegex = new RegExp('^[\\w\\s-]+\\.[A-Za-z]{3,4}$')
-                 // test du nom de fichier
+                // test du nom de fichier
                 const regexValid = fileRegex.test(file.name)
                 // vérification du type de fichier
                 const isValid = isValidFile(file)

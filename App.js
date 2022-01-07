@@ -16,7 +16,6 @@ app.use(cookieParser())
 app.use((req, res, next) => {
     const allowedOrigins = ['https://rubycouz.cc', 'http://localhost:3000']
     const origin = req.headers.origin
-    console.log(origin)
     if (allowedOrigins.includes(origin)) {
         res.setHeader('Access-Control-Allow-Origin', origin);
     }
