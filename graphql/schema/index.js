@@ -143,7 +143,7 @@ module.exports = buildSchema(`
             clan_desc: String!
             clan_banner: String
             clan_discord: String
-            clan_population: Int
+            clan_population: String
             clan_recrut: String
             clan_activity: String
         }
@@ -153,7 +153,7 @@ module.exports = buildSchema(`
             clan_desc: String
             clan_banner: String
             clan_discord: String
-            clan_population: Int
+            clan_population: String
             clan_recrut: String
             clan_activity: String
         }

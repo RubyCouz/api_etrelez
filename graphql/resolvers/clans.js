@@ -49,7 +49,7 @@ module.exports = {
         try {
             const result = await clan.save()
             let picName
-            if (args.clanInput.clan_banner !== '') {
+            if (args.clanInput.clan_banner !== undefined) {
                 const file = args.clanInput.clan_banner.split('.')
                 const ext = file.pop()
                 picName = result._id + '_clan.' + ext

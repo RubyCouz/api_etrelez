@@ -210,7 +210,7 @@ exports.errorType = {
      */
 
     CLAN_NOT_EXIST: {
-        message: 'Cet évènement n\'est pas encore enregistré'
+        message: 'Ce clan n\'est pas encore enregistré'
     },
     clan_banner: {
         message: 'Cette image n\'est pas prise en charge'
