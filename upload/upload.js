@@ -59,14 +59,14 @@ module.exports = function upload(req, res, next) {
     form.parse(req, async (err, fields, files) => {
 
 
-        if (err) {
-            console.log(err)
-            return res.status(400).json({
-                status: 'Fail',
-                message: 'There was an error parsing the file',
-                error: err
-            })
-        }
+        // if (err) {
+        //     console.log(err)
+        //     return res.status(400).json({
+        //         status: 'Fail',
+        //         message: 'There was an error parsing the file',
+        //         error: err
+        //     })
+        // }
         /**
          * vérification du type de fichier
          * @param file
