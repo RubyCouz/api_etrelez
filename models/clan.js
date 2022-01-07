@@ -18,7 +18,7 @@ const clanSchema = new Schema({
         clan_discord: unRequiredString,
         clan_population: {
             type: Number,
-            required: true
+            required: false
         },
         clan_recrut: unRequiredString,
         clan_activity: unRequiredString,
