@@ -199,7 +199,7 @@ const transformClanGame = clanGame => {
     return {
         ...clanGame._doc,
         _id: clanGame.id,
-        clan: user.bind(this, clanGame._doc.clan),
+        clan: singleClan.bind(this, clanGame._doc.clan),
         game: singleGame.bind(this, clanGame._doc.game),
         createdAt: dateToString(clanGame._doc.createdAt),
         updatedAt: dateToString(clanGame._doc.createdAt)
