@@ -28,6 +28,7 @@ module.exports = {
      * @returns {Promise<{[p: string]: *}>}
      */
     createClan: async (args, req) => {
+        console.log(args.clanInput)
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
