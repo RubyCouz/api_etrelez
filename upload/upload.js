@@ -57,8 +57,6 @@ module.exports = function upload(req, res, next) {
     form.uploadDir = uploadFolder
 
     form.parse(req, async (err, fields, files) => {
-        console.log(err)
-        console.log(fields)
         console.log(files)
 
         // if (err) {
@@ -81,7 +79,6 @@ module.exports = function upload(req, res, next) {
 
         }
         if (typeof files === 'object') {
-            console.log(files.file)
             // vérification upload multiple
             if (!files.file.length) {
                 const file = files.file
