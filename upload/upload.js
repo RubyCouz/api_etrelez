@@ -57,16 +57,16 @@ module.exports = function upload(req, res, next) {
     form.uploadDir = uploadFolder
 
     form.parse(req, async (err, fields, files) => {
-        console.log(files.file)
-
-        // if (err) {
-        //     console.log(err)
-        //     return res.status(400).json({
-        //         status: 'Fail',
-        //         message: 'There was an error parsing the file',
-        //         error: err
-        //     })
-        // }
+        console.log('fichier: ' + files.file.name)
+        console.log('erreur: ' + err)
+        if (err) {
+            console.log(err)
+            return res.status(400).json({
+                status: 'Fail',
+                message: 'There was an error parsing the file',
+                error: err
+            })
+        }
         /**
          * vérification du type de fichier
          * @param file
