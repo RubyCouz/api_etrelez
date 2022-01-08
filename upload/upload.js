@@ -57,7 +57,7 @@ module.exports = function upload(req, res, next) {
     form.uploadDir = uploadFolder
 
     form.parse(req, async (err, fields, files) => {
-        console.log('fichier: ' + files.file.name)
+        console.log('fichier: ' + files.file)
         console.log('erreur: ' + err)
         if (err) {
             console.log(err)
