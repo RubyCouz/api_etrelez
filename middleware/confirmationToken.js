@@ -10,6 +10,7 @@ exports.confirmationToken = (info, pass) => {
             exp: Math.floor(Date.now() / 1000) + (CONFIRMATION_TOKEN_EXPIRE_TIME * 60)
         },
         TOKEN_KEY
+
     )
 
 }

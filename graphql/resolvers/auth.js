@@ -11,8 +11,9 @@ const {confirmationToken} = require('../../middleware/confirmationToken')
 const {passConfirmation} = require('../../helpers/passConfirmation')
 const signupMail = require('../../middleware/signupMail')
 const {validForm} = require('../../middleware/validForm')
-module.exports = {
+// const {io} = require("../../App");
 
+module.exports = {
     /**
      * sélection d'un utilisateur en fonction de son mail
      * @param user_email
@@ -27,7 +28,6 @@ module.exports = {
     //     }
     //     return existingUser
     // },
-
     /**
      * inscription (création utilisateur)
      * @param args
@@ -51,6 +51,7 @@ module.exports = {
                 user_avatar: 'default.gif',
                 user_role: 'membre',
                 user_isActive: false,
+                user_isOnline: false,
             })
             const result = await user.save()
             // création code secret
@@ -73,7 +74,6 @@ module.exports = {
             throw err
         }
     },
-
     /**
      * confirmation d'inscription
      * @param args
@@ -127,7 +127,6 @@ module.exports = {
             refreshToken: tokens.refreshToken,
         }
     },
-
     /**
      * renvoie de la confirmation d'inscription
      * @returns {Promise<void>}
@@ -156,7 +155,6 @@ module.exports = {
         }
         return user
     },
-
     /**
      * connexion
      * @param user_email
@@ -191,6 +189,7 @@ module.exports = {
         const tokens = createTokens(user)
         if (tokens) {
             req.isAuth = true
+            // io.emit('user-connected', 'connected')
         }
         createCookies(req, tokens)
         return {
@@ -198,11 +197,9 @@ module.exports = {
             refreshToken: tokens.refreshToken,
         }
     },
-
     createdByAdmin: async (args) => {
         try {
             validForm(args)
-
             const existingUser = await User.findOne({
                 user_email: args.user_email
             })

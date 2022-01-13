@@ -1,9 +1,8 @@
-const User = require("../../models/user");
-const bcrypt = require('bcryptjs')
-const {transformUser} = require("./merge");
-const {errorName} = require("../../errors/errorConstant");
-const {validForm} = require("../../middleware/validForm");
-const fs = require("fs");
+const User = require('../../models/user')
+const {transformUser} = require('./merge')
+const {errorName} = require('../../errors/errorConstant')
+const {validForm} = require('../../middleware/validForm')
+const {renameFile} = require('../../helpers/renameFile')
 
 module.exports = {
     /**
@@ -57,14 +56,16 @@ module.exports = {
         }
         validForm(updateUserInput)
         try {
-            const user = await User.findById(_id);
+            const user = await User.findById(_id)
+            console.log(user)
             if (!user) {
                 throw new Error(errorName.ERROR_USER);
             } else {
                 if(updateUserInput.user_avatar !== '' && updateUserInput.user_avatar !== undefined) {
-                    const file = updateUserInput.user_avatar.split('.')
-                    const ext = file.pop()
-                    updateUserInput.user_avatar = _id + '_avatar.' + ext
+                    updateUserInput.user_avatar = renameFile(updateUserInput.user_avatar, 'avatar', _id)
+                }
+                if(updateUserInput.user_banner !== '' && updateUserInput.user_banner !== undefined) {
+                    updateUserInput.user_banner = renameFile(updateUserInput.user_banner, 'banner', _id)
                 }
                 User.findOneAndUpdate(
                     {_id: _id},

@@ -8,10 +8,47 @@ const isAuth = require('./middleware/is-auth')
 const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
 const getErrorCode = require('./errors/errors')
-// const ssl = require('./.well-known/pki-validation/4A9FF1CEBA9BCFDA15B0762012FE5D58.txt')
-const app = express()
-app.use(express.static(__dirname + '/Public'))
+const { createServer } = require('http')
+const { Server } = require('socket.io')
+const {REFRESH_TOKEN_KEY, TOKEN_KEY} = require('./helpers/tokenKey')
+const jwt = require('jsonwebtoken')
+const User = require('./models/user')
+const req = require("express");
 
+const app = express()
+const httpServer = createServer(app)
+const io = new Server(httpServer, {
+    cors: {
+        origin: 'http://localhost:3000',
+        methods: ["GET", "POST"],
+        credentials: true
+    }
+});
+let users = []
+    io.on('connection', (socket) => {
+        socket.on('isOnline', async function (data) {
+            const decodedToken = jwt.verify(data.token, TOKEN_KEY)
+            console.log(decodedToken.userId + ' is connected')
+            users[socket.id] = decodedToken.userId
+            console.log(users)
+            const updateUserInput = {
+                user_isOnline: true
+            }
+            const user = await User.findOneAndUpdate({_id: decodedToken.userId}, updateUserInput)
+            socket.emit('online', user.user_isOnline)
+        })
+        socket.on('isOffline', function(data) {
+            console.log(data)
+        })
+        // socket.on('disconnect', function() {
+        //     const updateUserInput = {
+        //         user_isOnline: false
+        //     }
+        // })
+    })
+
+
+app.use(express.static(__dirname + '/Public'))
 app.use(cookieParser())
 app.use((req, res, next) => {
     const allowedOrigins = ['https://rubycouz.cc', 'http://localhost:3000']
@@ -27,7 +64,6 @@ app.use((req, res, next) => {
     }
     next()
 })
-
 app.use(bodyParser.json())
 app.use(isAuth)
 app.use('/api', graphqlHTTP({
@@ -40,18 +76,18 @@ app.use('/api', graphqlHTTP({
         return ({message: error.message, statusCode: error.statusCode})
     }
 }))
-
 app.post('/upload/clan/:id', upload)
 app.post('/upload/game/:id', upload)
 app.post('/upload/event/:id', upload)
-app.post('/upload/profilePic/:id', upload)
+app.post('/upload/users/avatar/:id', upload)
+app.post('/upload/users/banner/:id', upload)
 mongoose.connect(`mongodb+srv://RubyCouz:RubyCouz2805@eterelz.2zwgz.mongodb.net/Eterelz?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
 })
     .then(() => {
-            app.listen(5000)
+        httpServer.listen(5000)
         }
     )
     .catch(err => {

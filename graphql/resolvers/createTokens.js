@@ -14,6 +14,7 @@ module.exports = (user) => {
             userId: user.id,
             userRole: user.user_role,
             is_active: user.user_isActive,
+            is_online: user.user_isOnline,
             exp: Math.floor(Date.now() / 1000) + ( TOKEN_EXPIRE_TIME * 60 ),
         },
         TOKEN_KEY

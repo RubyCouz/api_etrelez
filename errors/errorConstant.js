@@ -158,6 +158,14 @@ exports.errorType = {
         message: 'Je ne sais pas quoi dire... A part que cet état n\existe pas par ici',
         statusCode: 703
     },
+    user_avatar: {
+        message: 'Naaaaaaaaah, on prend pas ce type de fichier ici...',
+        statusCode: 703
+    },
+    user_banner: {
+        message: 'Naaaaaaaaah, on prend pas ce type de fichier ici...',
+        statusCode: 703
+    },
     /**
      * Db
      */

@@ -1,53 +1,61 @@
 const fs = require('fs')
 const {errorName} = require("../errors/errorConstant");
 const IncomingForm = require('formidable').IncomingForm // permet de porser les fichiers, express ayant du mal avec
+const {isFolderExists} = require('../helpers/isFolderExists')
 module.exports = function upload(req, res, next) {
     //check de l'existence du dossier public
-    const directory = './Public'
-    if (!fs.existsSync(directory)) {
-        // création du dossier
-        fs.mkdirSync(directory)
-    }
+    isFolderExists('./Public')
     // check de l'existence du dossier upload
-    const uploadDirectory = './Public/Upload'
-    if (!fs.existsSync(uploadDirectory)) {
-        // création du dossier
-        fs.mkdirSync(uploadDirectory)
-    }
+    isFolderExists('./Public/Upload')
     // récupération de l'url et stockage dans un tableau
     const urlToArray = req.url.split('/')
-    const id = urlToArray[3]
+    const id = urlToArray[4]
     const idRegex = new RegExp('^[\\w]{24}$')
     if (!idRegex.test(id)) {
         throw new Error(errorName.PERMISSION_ERROR)
     }
+    let finalFolder = ''
+    let userFolder = ''
     let folder = ''
     let prefix = ''
     // check du dernier paramêtre de l'url pour savoir où le fichier sera stocké
     switch (urlToArray[2]) {
         case 'game' :
-            folder = 'Game'
+            finalFolder = 'Game'
             prefix = '_game.'
             break
-        case 'profilePic':
-            folder = 'ProfilePic'
+        case 'users':
+            finalFolder = 'Users'
             prefix = '_avatar.'
             break
         case 'event':
-            folder = 'Event'
+            finalFolder = 'Event'
             prefix = '_event.'
             break
         case 'clan':
-            folder = 'Clan'
+            finalFolder = 'Clan'
             prefix = '_clan.'
             break
     }
     // check si le dossier de destination existe
-    if (!fs.existsSync(uploadDirectory + '/' + folder)) {
-        // création du dossier
-        fs.mkdirSync(uploadDirectory + '/' + folder)
+    isFolderExists('./Public/Upload/' + folder)
+    switch(urlToArray[3]) {
+        case 'banner':
+            userFolder = 'Banner'
+            finalFolder = finalFolder + '/' + userFolder
+            prefix = '_banner.'
+            break
+        case 'avatar':
+            userFolder = 'Avatar'
+            finalFolder = finalFolder + '/' + userFolder
+            prefix = '_avatar.'
+            break
+        default:
+            userFolder = ''
+            break
     }
-    const uploadFolder = uploadDirectory + '/' + folder
+    const uploadFolder = './Public/Upload/' + finalFolder
+    isFolderExists(uploadFolder)
     let form = new IncomingForm()
     // interdiction d'upload multiple
     form.multiples = false
@@ -57,10 +65,8 @@ module.exports = function upload(req, res, next) {
     form.uploadDir = uploadFolder
 
     form.parse(req, async (err, fields, files) => {
-        console.log('fichier: ' + files.file)
-        console.log('erreur: ' + err)
         if (err) {
-            console.log(err)
+
             return res.status(400).json({
                 status: 'Fail',
                 message: 'There was an error parsing the file',

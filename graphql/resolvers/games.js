@@ -2,6 +2,7 @@ const Game = require('../../models/game')
 const User = require('../../models/user')
 const {transformGame} = require('./merge')
 const {validForm} = require('../../middleware/validForm')
+const {renameFile} = require('../../helpers/renameFile')
 const {errorName} = require('../../errors/errorConstant')
 
 module.exports = {
@@ -31,7 +32,6 @@ module.exports = {
         }
         // vérification des données saisie
         validForm(args.gameInput)
-
         // instanciation d'un nouvel objet game
         const game = new Game({
             game_name: args.gameInput.game_name,
@@ -47,12 +47,8 @@ module.exports = {
             if (args.gameInput.game_pic === ''|| args.gameInput.game_pic === null) {
                 picName = 'default.gif'
             } else {
-                const file = args.gameInput.game_pic.split('.')
-                const ext = file.pop()
-                picName = result._id + '_game.' + ext
-
+                picName = renameFile(args.gameInput.game_pic, 'game', game._id)
             }
-
             const gameUpdateInput = {game_pic: picName}
             // enregistrement du fichier après renommage
             Game.findOneAndUpdate({
@@ -96,9 +92,7 @@ module.exports = {
                 throw new Error(errorName.GAME_NOT_EXIST)
             } else {
                 if (gameUpdateInput.game_pic !== '' && gameUpdateInput.game_pic !== undefined) {
-                    const file = gameUpdateInput.game_pic.split('.')
-                    const ext = file.pop()
-                    gameUpdateInput.game_pic = id + '_game.' + ext
+                    gameUpdateInput.game_pic = renameFile(gameUpdateInput.game_pic, 'game', id)
                 }
                 Game.findOneAndUpdate(
                     {_id: id},

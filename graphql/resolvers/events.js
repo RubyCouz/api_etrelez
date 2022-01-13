@@ -1,8 +1,9 @@
 const Event = require('../../models/event')
 const User = require('../../models/user')
 const {transformEvent} = require('./merge')
-const {errorName} = require("../../errors/errorConstant");
-const {validForm} = require("../../middleware/validForm");
+const {errorName} = require('../../errors/errorConstant')
+const {validForm} = require('../../middleware/validForm')
+const {renameFile} = require('../../helpers/renameFile')
 
 
 module.exports = {
@@ -46,9 +47,7 @@ module.exports = {
             const result = await event.save()
             let picName
             if (args.eventInput.event_pic !== '') {
-                const file = args.eventInput.event_pic.split('.')
-                const ext = file.pop()
-                picName = result._id + '_event.' + ext
+                picName = renameFile(args.eventInput.event_pic, 'event', event._id)
             } else {
                 args.eventInput.event_pic = 'default.gif'
             }
@@ -117,9 +116,7 @@ module.exports = {
                 throw new Error(errorName.EVENT_NOT_EXIST)
             } else {
                 if(updateEventInput.event_pic !== '' && updateEventInput.event_pic !== undefined) {
-                    const file = updateEventInput.event_pic.split('.')
-                    const ext = file.pop()
-                    updateEventInput.event_pic = id + '_event.' + ext
+                    updateEventInput.event_pic = renameFile(updateEventInput.event_pic, 'event', id)
                 }
             }
             //trouve id via le FindByID (id dans index rootmutation est égal à _id dans Event)

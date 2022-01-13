@@ -1,10 +1,10 @@
 const User = require('../../models/user')
 const Clan = require('../../models/clan')
-// const Game = require('../../models/game')
-
 const {transformClan} = require('./merge')
-const {errorName} = require("../../errors/errorConstant");
-const {validForm} = require("../../middleware/validForm");
+const {errorName} = require('../../errors/errorConstant')
+const {validForm} = require('../../middleware/validForm')
+const {renameFile} = require('../../helpers/renameFile')
+
 
 module.exports = {
     /**
@@ -32,9 +32,7 @@ module.exports = {
         if (!req.isAuth.valid) {
             throw new Error(errorName.PERMISSION_ERROR)
         }
-
         validForm(args.clanInput)
-
         const clan = new Clan({
             clan_name: args.clanInput.clan_name,
             clan_desc: args.clanInput.clan_desc,
@@ -46,14 +44,11 @@ module.exports = {
             clan_creator: req.isAuth.userId
         })
         let user_createdClan
-
         try {
             const result = await clan.save()
             let picName
             if (args.clanInput.clan_banner !== undefined) {
-                const file = args.clanInput.clan_banner.split('.')
-                const ext = file.pop()
-                picName = result._id + '_clan.' + ext
+                picName = renameFile(args.clanInput.clan_banner, 'clan', clan._id)
             }
 
             const updateClanInput = {clan_banner: picName}
@@ -116,9 +111,7 @@ module.exports = {
                 throw new Error(errorName.CLAN_NOT_EXIST)
             } else {
                 if (updateClanInput.clan_banner !== '' && updateClanInput.clan_banner !== undefined) {
-                    const file = updateClanInput.clan_banner.split('.')
-                    const ext = file.pop()
-                    updateClanInput.clan_banner = id + '_clan.' + ext
+                    updateClanInput.clan_banner = renameFile(updateClanInput.clan_banner, 'clan', id)
                 }
                 Clan.findOneAndUpdate(
                     {_id: id},

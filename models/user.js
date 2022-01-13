@@ -13,6 +13,7 @@ const unRequiredString = {
 
 const userSchema = new Schema({
         user_avatar: unRequiredString,
+        user_banner: unRequiredString,
         user_login: requiredString,
         user_email: requiredString,
         user_password: requiredString,
@@ -24,7 +25,7 @@ const userSchema = new Schema({
         user_role: unRequiredString,
         user_state: unRequiredString,
         user_isActive: Boolean,
-        user_isDark: Boolean,
+        user_isOnline: Boolean,
         user_createdEvent: [{
             type: Schema.Types.ObjectId,
             ref: 'Event'

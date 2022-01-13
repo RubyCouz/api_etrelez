@@ -13,6 +13,7 @@ module.exports = buildSchema(`
             user_gender: String
             user_role: String!
             user_avatar: String
+            user_banner: String
             user_state: String 
             user_createdEvent: [Event!] 
             user_createdClans: [Clan!]
@@ -21,10 +22,12 @@ module.exports = buildSchema(`
             createdAt: String!
             updatedAt: String!
             user_isActive: Boolean
+            user_isOnline: Boolean
         }
         
         type AuthData {
             token: String!
+            
         }
         
         type Event {
@@ -117,6 +120,7 @@ module.exports = buildSchema(`
             user_login: String
             user_email: String
             user_avatar: String
+            user_banner: String
             user_password: String
             user_discord: String
             user_address: String
@@ -127,6 +131,7 @@ module.exports = buildSchema(`
             user_state: String 
             updatedAt: String
             user_isActive: Boolean
+            user_isOnline: Boolean
         }
             
         input EventInput {
