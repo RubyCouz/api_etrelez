@@ -11,14 +11,14 @@ const getErrorCode = require('./errors/errors')
 const {createServer} = require('http')
 const {Server} = require('socket.io')
 const {REFRESH_TOKEN_KEY, TOKEN_KEY} = require('./helpers/tokenKey')
-const {DB, DB_USER, DB_PASSWORD, DB_SPACE} = require('./config')
+const {DB, DB_USER, DB_PASSWORD, DB_SPACE, HOST} = require('./config')
 const jwt = require('jsonwebtoken')
 const User = require('./models/user')
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: HOST,
         methods: ["GET", "POST"],
         credentials: true
     }
