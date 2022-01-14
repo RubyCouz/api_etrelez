@@ -1,5 +1,4 @@
-
-const config = require('../config.json')
+const {EMAIL, PASSWORD} = require('../config.js')
 const nodemailer = require("nodemailer");
 exports.nodemailer = () => {
     let transporter = nodemailer.createTransport({
@@ -7,8 +6,8 @@ exports.nodemailer = () => {
         port: 587,
         secure: false, // true for 465, false for other ports
         auth: {
-            user: config.email, // generated ethereal user
-            pass: config.pass, // generated ethereal password
+            user: EMAIL, // generated ethereal user
+            pass: PASSWORD, // generated ethereal password
         },
         tls: {
             rejectUnauthorized: false

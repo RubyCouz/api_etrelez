@@ -8,13 +8,12 @@ const isAuth = require('./middleware/is-auth')
 const cookieParser = require('cookie-parser');
 const upload = require('./upload/upload')
 const getErrorCode = require('./errors/errors')
-const { createServer } = require('http')
-const { Server } = require('socket.io')
+const {createServer} = require('http')
+const {Server} = require('socket.io')
 const {REFRESH_TOKEN_KEY, TOKEN_KEY} = require('./helpers/tokenKey')
+const {DB, DB_USER, DB_PASSWORD, DB_SPACE} = require('./config')
 const jwt = require('jsonwebtoken')
 const User = require('./models/user')
-const req = require("express");
-
 const app = express()
 const httpServer = createServer(app)
 const io = new Server(httpServer, {
@@ -25,27 +24,33 @@ const io = new Server(httpServer, {
     }
 });
 let users = []
-    io.on('connection', (socket) => {
-        socket.on('isOnline', async function (data) {
-            const decodedToken = jwt.verify(data.token, TOKEN_KEY)
-            console.log(decodedToken.userId + ' is connected')
-            users[socket.id] = decodedToken.userId
-            console.log(users)
-            const updateUserInput = {
-                user_isOnline: true
-            }
-            const user = await User.findOneAndUpdate({_id: decodedToken.userId}, updateUserInput)
-            socket.emit('online', user.user_isOnline)
-        })
-        socket.on('isOffline', function(data) {
-            console.log(data)
-        })
-        // socket.on('disconnect', function() {
-        //     const updateUserInput = {
-        //         user_isOnline: false
-        //     }
-        // })
+io.on('connection', (socket) => {
+    socket.on('online', async function (data) {
+        const decodedToken = jwt.verify(data.token, TOKEN_KEY)
+        users[socket.id] = decodedToken.userId
+        const updateUserInput = {
+            user_isOnline: true
+        }
+        await User.findOneAndUpdate({_id: decodedToken.userId}, updateUserInput)
+        const user = await User.findOne({_id: decodedToken.userId})
+        io.emit('isOnline', {isOnline: user.user_isOnline, userId: user._id})
+
+
     })
+    socket.on('offline', async function (data) {
+        const updateUserInput = {
+            user_isOnline: false
+        }
+        await User.findOneAndUpdate({_id: data.userId}, updateUserInput)
+        const user = await User.findOne({_id: data.userId})
+        io.emit('isOnline', {isOnline: user.user_isOnline, userId: user._id})
+    })
+    // socket.on('disconnect', function() {
+    //     const updateUserInput = {
+    //         user_isOnline: false
+    //     }
+    // })
+})
 
 
 app.use(express.static(__dirname + '/Public'))
@@ -81,13 +86,13 @@ app.post('/upload/game/:id', upload)
 app.post('/upload/event/:id', upload)
 app.post('/upload/users/avatar/:id', upload)
 app.post('/upload/users/banner/:id', upload)
-mongoose.connect(`mongodb+srv://RubyCouz:RubyCouz2805@eterelz.2zwgz.mongodb.net/Eterelz?retryWrites=true&w=majority`, {
+mongoose.connect(`mongodb+srv://${DB_USER}:${DB_PASSWORD}@${DB_SPACE}.2zwgz.mongodb.net/${DB}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
 })
     .then(() => {
-        httpServer.listen(5000)
+            httpServer.listen(5000)
         }
     )
     .catch(err => {
