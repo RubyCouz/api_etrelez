@@ -22,6 +22,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm install
+      - run: touch config.js
+      - run: echo "exports.DB = 'Eterelz'
+                   exports.DB_USER = 'RubyCouz'
+                   exports.DB_PASSWORD = 'RubyCouz2805'
+                   exports.DB_SPACE = 'eterelz'
+                   exports.EMAIL = 'admin@rubycouz.xyz'
+                   exports.PASSWORD = '#Couz2805'
+                   exports.HOST = 'https:rubycouz.cc'" > src/config.js
       - run: cp -r /root/actions-runner/api/api_etrelez/api_etrelez/* /var/www/rubycouz.cc/api
 #      - run: mv /var/www/rubycouz.cc/api_etrelez /var/www/rubycouz.cc/api
 #      - run: cp -r /root/actions-runner/api/api /var/www/rubycouz.cc
